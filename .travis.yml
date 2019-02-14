@@ -17,6 +17,11 @@ install:
 script:
   - /bin/true
 after-success:
-  - npm run
+  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+    docker login repo.treescale.com
+    username: $DOCKER_USERNAME
+    password: $DOCKER_PASSWORD
+    docker push repo.treescale.com/colinskeep/ozark-api:latest
+  fi
 notifications:
   email: false
