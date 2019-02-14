@@ -15,7 +15,7 @@ cache:
 install:
   - npm install
 script:
-  - /bin/true
+  - xvfb-run npm run test
 after-success:
   - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
     docker login repo.treescale.com -u $TREESCALE_USERNAME -p $TREESCALE_PASSWORD

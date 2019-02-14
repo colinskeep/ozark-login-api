@@ -5,7 +5,7 @@
   "main": "api.js",
   "scripts": {
     "start": "node api.js",
-    "test": "npm run lint && mocha --exit src/**/tests/*.js",
+    "test": "mocha --exit src/**/tests/*.js",
     "lint": "eslint --ignore-path .gitignore .",
     "docker": "docker-compose build && docker-compose start",
     "down": "docker-compose down"
