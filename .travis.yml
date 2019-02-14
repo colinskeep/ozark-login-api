@@ -14,9 +14,6 @@ cache:
     - node_modules
 install:
   - npm install
-before_script:
-  - npm run lint
-  - npm run build
 script:
   - xvfb-run npm run test
 after_success:
@@ -24,7 +21,13 @@ after_success:
     docker login repo.treescale.com
     username: $TREESCALE_USERNAME
     password: $TREESCALE_PASSWORD
-    kompose up repo.treescale.com/colinskeep/ozark-login-api:latest
+    sudo apt-get update && sudo apt-get install -y apt-transport-https
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+    sudo apt-get update
+    sudo apt-get install -y kubectl
+    docker push repo.treescale.com/colinskeep/ozark-login-api:latest
+    ansible-playbook deploy/deploy_to_k8s.yml -i localhost, -c local -e docker_repo=repo.treescale.com -e docker_repo_username=treescaleuser -e docker_repo_pass=treescalepass -e docker_repo_email=my@email.com
   fi
 notifications:
   email: false
