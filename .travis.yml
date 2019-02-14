@@ -22,6 +22,3 @@ after-success:
   . docker push repo.treescale.com/colinskeep/ozark-login-api:latest
 notifications:
   email: false
-before_install:
-- openssl aes-256-cbc -K $encrypted_ae91d56ff2f5_key -iv $encrypted_ae91d56ff2f5_iv
-  -in .env.enc -out .env -d
