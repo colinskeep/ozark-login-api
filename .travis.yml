@@ -22,7 +22,7 @@ after-success:
     username: $DOCKER_USERNAME
     password: $DOCKER_PASSWORD
     docker build
-    docker push repo.treescale.com/colinskeep/ozark-api:latest
+    docker push repo.treescale.com/colinskeep/ozark-login-api:latest
   fi
 notifications:
   email: false
