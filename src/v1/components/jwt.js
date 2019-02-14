@@ -1,9 +1,5 @@
 'use strict';
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
-
-const privateKey = fs.readFileSync('./private.key', 'utf8');
-const publicKey = fs.readFileSync('./public.key', 'utf8');
 
 const signOptions = {
   expiresIn: '12h',
@@ -16,7 +12,7 @@ const signOptions = {
 */
 async function sign(payload) {
   try {
-    const token = await jwt.sign(payload, privateKey, signOptions);
+    const token = await jwt.sign(payload, process.env.PRIVATE_KEY, signOptions);
     return token;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -30,7 +26,7 @@ async function sign(payload) {
 */
 async function resolve(token) {
   try {
-    const data = await jwt.verify(token, publicKey, signOptions);
+    const data = await jwt.verify(token, process.env.PUBLIC_KEY, signOptions);
     return data;
   } catch (err) {
     // eslint-disable-next-line no-console
