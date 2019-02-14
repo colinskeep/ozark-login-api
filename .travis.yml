@@ -19,9 +19,9 @@ script:
 after-success:
   - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
     docker login repo.treescale.com
-    username: $DOCKER_USERNAME
-    password: $DOCKER_PASSWORD
-    docker build
+    username: $TREESCALE_USERNAME
+    password: $TREESCALE_PASSWORD
+    docker build -t repo.treescale.com/colinskeep/ozark-login-api .
     docker push repo.treescale.com/colinskeep/ozark-login-api:latest
   fi
 notifications:
