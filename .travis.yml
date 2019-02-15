@@ -14,11 +14,15 @@ cache:
   - node_modules
 install:
 - npm install
+- curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+- curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $DO_API_TOKEN" "https://api.digitalocean.com/v2/kubernetes/clusters/$CLUSTER_ID/kubeconfig" -o $PROJECT_NAME-kubeconfig.yaml
+before_script:
+- kubectl --kubeconfig="$PROJECT_NAME-kubeconfig.yaml" get nodes
 script:
 - xvfb-run npm run test
 after_success:
-- docker login repo.treescale.com -u $TREESCALE_USERNAME -p $TREESCALE_PASSWORD
-- docker build -t repo.treescale.com/colinskeep/ozark-login-api .
-- docker push repo.treescale.com/colinskeep/ozark-login-api:latest
+- docker login -u $TREESCALE_USERNAME -p $TREESCALE_PASSWORD
+- docker build -t $TREESCALE_USERNAME/$PROJECT_NAME .
+- docker push $TREESCALE_USERNAME/$PROJECT_NAME:latest
 notifications:
   email: false
