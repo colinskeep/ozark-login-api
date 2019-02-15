@@ -23,7 +23,6 @@ after_success:
 - docker build -t $TREESCALE_USERNAME/$PROJECT_NAME .
 - docker push $TREESCALE_USERNAME/$PROJECT_NAME:latest
 - kubectl --kubeconfig="$PROJECT_NAME-kubeconfig.yaml" get nodes
-- kubectl --kubeconfig="$PROJECT_NAME-kubeconfig.yaml" create -f $PROJECT_NAME.yaml
 - kubectl --kubeconfig="$PROJECT_NAME-kubeconfig.yaml" run ozark-login-api --image="hub.docker.com/r/colinskeep/ozark-login/api:latest" --port="9000"
 notifications:
   email: false
