@@ -15,7 +15,7 @@ cache:
 install:
 - npm install
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
-- curl -X GET -H "Content-Type: application/json" -H "Authorization":" Bearer $DO_API_TOKEN" "https://api.digitalocean.com/v2/kubernetes/clusters/$CLUSTER_ID/kubeconfig" -o $PROJECT_NAME-kubeconfig.yaml
+- curl -X GET -H "Content-Type: application/json" -H "Authorization":" Bearer "$DO_API_TOKEN"" "https://api.digitalocean.com/v2/kubernetes/clusters/"$CLUSTER_ID"/kubeconfig" -o $PROJECT_NAME-kubeconfig.yaml
 before_script:
 - kubectl --kubeconfig="$PROJECT_NAME-kubeconfig.yaml" get nodes
 script:
