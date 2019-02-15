@@ -14,10 +14,11 @@ cache:
 install:
 - npm install
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
-- "curl -X GET -H 'Content-Type: application/json' -H 'Authorization: Bearer $DO_API_TOKEN' \"https://api.digitalocean.com/v2/kubernetes/clusters/$CLUSTER_ID/kubeconfig\" -o $PROJECT_NAME-kubeconfig.yaml"
 script:
 - xvfb-run npm run test
 after_success:
+- "curl -X GET -H \"Content-Type: application/json\" -H \"Authorization: Bearer $DO_API_TOKEN\" \"https://api.digitalocean.com/v2/kubernetes/clusters/$CLUSTER_ID/kubeconfig\" -o $PROJECT_NAME-kubeconfig.yaml"
+- cat $PROJECT_NAME-kubeconfig.yaml
 - docker login -u $TREESCALE_USERNAME -p $TREESCALE_PASSWORD
 - docker build -t $TREESCALE_USERNAME/$PROJECT_NAME .
 - docker push $TREESCALE_USERNAME/$PROJECT_NAME:latest
