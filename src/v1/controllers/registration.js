@@ -3,6 +3,7 @@ const jwt = require('../components/jwt.js');
 const bcrypt = require('bcrypt');
 const sgMail = require('@sendgrid/mail');
 const LogError = require('../components/LogError.js');
+const emailHtml = require('../components/emailHtml.js');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 /**
  * Function to execute when endpoint reached
@@ -14,19 +15,17 @@ async function postRegister(req, res, next) {
   try {
     const name = req.body.name;
     const email = req.body.email;
+    const mode = req.body.mode;
+    const language = req.body.language;
     const password = await bcrypt.hash(req.body.password, 12);
     const writeLog = await registration.log(
         name, email, password);
     if (writeLog.valid === true) {
       const token = await jwt.sign({name, email, password});
       res.status(200).json({jwt: token});
-      await sgMail.send({
-        to: `${email}`,
-        from: process.env.EMAIL_SENDER,
-        subject: process.env.EMAIL_SUBJECT,
-        text: 'test',
-        html: `<strong> ${writeLog.verificationCode} </strong>`,
-      });
+      const emailCnt = emailHtml.set(process.env.EMAIL_SENDER, email, mode, writeLog.verificationCode, language);
+      console.log(emailCnt);
+      await sgMail.send(emailCnt);
     } else {
       res.status(200).json({error: writeLog.err});
     }
