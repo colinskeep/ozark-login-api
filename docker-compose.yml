@@ -1,0 +1,11 @@
+version: "3"
+services:
+  app:
+    container_name: ozark-login-api
+    restart: always
+    build: ./
+    image: ozark-login-api
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/app
