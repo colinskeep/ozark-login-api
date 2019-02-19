@@ -8,10 +8,10 @@ async function userName(term) {
   try {
     const arr = [];
     const userNames = await registrationModel.find(
-        {'name': {'$regex': term, '$options': 'i'}}, {name: 1, email: 1}
+        {'name': {'$regex': term, '$options': 'i'}}, {id: 1, name: 1, email: 1}
     );
     const userEmails = await registrationModel.find(
-        {'email': {'$regex': term, '$options': 'i'}}, {name: 1, email: 1}
+        {'email': {'$regex': term, '$options': 'i'}}, {id: 1, name: 1, email: 1}
     );
     for (let i = 0; i <= userEmails.length; i++) {
       if (userNames.map(function(e) {

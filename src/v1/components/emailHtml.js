@@ -36,7 +36,7 @@ function set(emailSender, email, mode, verificationCode, language) {
               </div>
           </body>
       </html>`,
-  }
+  };
 }
 module.exports = {
   set,
