@@ -19,6 +19,7 @@ async function find(email, password) {
       const match = await bcrypt.compare(password, emailExists.password);
       if (match) {
         return {valid: true,
+          id: emailExists._id,
           name: emailExists.name,
           email: emailExists.email,
           password: emailExists.password,

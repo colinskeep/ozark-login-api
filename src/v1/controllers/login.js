@@ -16,7 +16,10 @@ async function postLogin(req, res, next) {
       const token = await jwt.sign({name: findLog.name,
         email: findLog.email,
         password: findLog.password});
-      res.status(200).json({jwt: token});
+      res.status(200).json({
+        jwt: token,
+        id: findLog.id,
+      });
     } else {
       res.status(200).json({error: findLog.valid});
     }
