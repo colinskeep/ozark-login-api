@@ -15,7 +15,7 @@ async function postResend(req, res, next) {
     const token = req.headers.authorization.split(' ')[1];
     const jwtDetails = await jwt.resolve(token);
     const emailInfo = await resend.log(jwtDetails.email);
-    const emailCnt = emailHtml.set(req.body.mode, emailInfo.verificationCode, req.body.language);
+    const emailCnt = emailHtml.set(process.env.EMAIL_SENDER, emailInfo.email, req.body.mode, emailInfo.verificationCode, req.body.language);
     await sgMail.send(emailCnt);
   } catch (err) {
     return next(new LogError(err, 500, true));

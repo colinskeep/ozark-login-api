@@ -14,6 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
+    "aws-sdk": "^2.405.0",
     "babel-eslint": "^10.0.1",
     "bcrypt": "^3.0.3",
     "bluebird": "^3.5.3",
@@ -29,6 +30,7 @@
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.4.0",
     "morgan": "^1.9.1",
+    "sharp": "^0.21.3",
     "travis": "^0.1.1",
     "winston": "^3.2.1"
   },

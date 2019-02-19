@@ -11,7 +11,10 @@ async function log(email, verificationCode) {
       await registrationModel.findOneAndUpdate({email},
           {$set: {verifiedEmail: true}},
           {upsert: true});
-      return true;
+      return {
+        data: true,
+        id: emailExists._id,
+      };
     } else {
       return false;
     }

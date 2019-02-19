@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const sgMail = require('@sendgrid/mail');
 const LogError = require('../components/LogError.js');
 const emailHtml = require('../components/emailHtml.js');
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 /**
  * Function to execute when endpoint reached
@@ -24,7 +25,6 @@ async function postRegister(req, res, next) {
       const token = await jwt.sign({name, email, password});
       res.status(200).json({jwt: token});
       const emailCnt = emailHtml.set(process.env.EMAIL_SENDER, email, mode, writeLog.verificationCode, language);
-      console.log(emailCnt);
       await sgMail.send(emailCnt);
     } else {
       res.status(200).json({error: writeLog.err});

@@ -1,6 +1,7 @@
 const verify = require('../components/verify.js');
 const jwt = require('../components/jwt.js');
 const LogError = require('../components/LogError.js');
+const pfp = require('../components/pfp-gen.js');
 /**
  * Function to execute when endpoint reached
  * @param {string} req - incoming request
@@ -13,8 +14,12 @@ async function postValidate(req, res, next) {
     const code = req.body.code;
     const userObj = await jwt.resolve(token);
     const verifyCode = await verify.log(userObj.email, code);
-    if (verifyCode === true) {
-      res.status(200).json({data: true});
+    if (verifyCode.data === true) {
+      await pfp.gen(verifyCode.id, 'images/background.jpg', (userObj.name.match(/[a-zA-Z]/) || []).pop().toUpperCase());
+      res.status(200).json({
+        data: true,
+        id: verifyCode.id,
+      });
     } else {
       res.status(200).json({data: false});
     }
