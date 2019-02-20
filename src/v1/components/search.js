@@ -14,20 +14,23 @@ async function userName(term) {
         {'email': {'$regex': term, '$options': 'i'}}, {id: 1, name: 1, email: 1}
     );
     for (let i = 0; i <= userEmails.length; i++) {
-      if (userNames.map(function(e) {
+      if (userEmails.length > 0 && userNames.map(function(e) {
         return e.id;
       }).indexOf(userEmails[i].id) === -1) {
         arr.push(userEmails[i]);
-      } if (i == userEmails.length - 1) {
-        const results = {
-          results: {name: userNames, email: arr},
-        };
-        return results;
+        if (i == userEmails.length - 1) {
+          const results = {
+            results: {name: userNames, email: arr},
+          };
+          return results;
+        }
+      } else {
+        return ({results: {name: userNames, email: arr}});
       }
     }
   } catch (err) {
     // eslint-disable-next-line no-console
-    // console.log(`logger log. ${err}`);
+    console.log(`logger log. ${err}`);
     return false;
   }
 }
