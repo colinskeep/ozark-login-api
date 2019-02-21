@@ -1,0 +1,17 @@
+###
+#You want to change the following
+#Provide via extra args using -e variable=value -e variable2=value2 if using TravisCI?
+###
+
+###
+#Below are variables you can probably leave alone
+###
+external_dns_config: "/tmp/external-dns.yml"
+k8s_docker_secret_name: regcred
+kubeconfig: "/tmp/kubeconfig.yml"
+kubectlbin: "kubectl --kubeconfig={{ kubeconfig }}"
+k8s_deployment_patch:
+ spec:
+   spec:
+    imagePullSecrets:
+     - name: "{{ k8s_docker_secret_name }}"

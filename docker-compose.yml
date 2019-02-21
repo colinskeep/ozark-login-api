@@ -5,6 +5,10 @@ services:
     restart: always
     build: ./
     image: ozark-login-api
+    labels:
+      kompose.volume.size: "2G"
+      kompose.service.expose: "api.websmite.net"
+      external-dns.alpha.kubernetes.io/hostname: "api.websmite.net"
     ports:
       - "9000:9000"
     volumes:

@@ -1,0 +1,106 @@
+- hosts: localhost
+  become: no
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: get k8s clusters
+      uri:
+        url: "https://api.digitalocean.com/v2/kubernetes/clusters"
+        headers:
+          Authorization: "Bearer {{ dotoken }}"
+          Accept: 'application/json'
+        validate_certs: no
+        follow_redirects: all
+        return_content: yes
+        status_code: 200
+        method: GET
+      register: clusters_raw
+      when: do_cluster_id is not defined
+      tags:
+        - dotoken
+
+    - debug:
+        msg: "{{ clusters_raw }}"
+      when: do_cluster_id is not defined
+      tags:
+        - dotoken
+    
+    - name: facts
+      set_fact:
+        do_cluster_id: "{{ clusters_raw.json.kubernetes_clusters.0.id }}"
+      # when: do_cluster_id is not defined
+    
+    - name: get kubeconfig
+      uri:
+        url: "https://api.digitalocean.com/v2/kubernetes/clusters/{{ clusters_raw.json.kubernetes_clusters.0.id  }}/kubeconfig"
+        headers:
+          Authorization: "Bearer {{ dotoken }}"
+          Accept: 'application/json'
+        validate_certs: no
+        follow_redirects: all
+        return_content: yes
+        status_code: 200
+        method: GET
+      register: kubeconfig_raw
+      tags:
+        - dotoken      
+
+    - debug:
+        msg: "{{ kubeconfig_raw.content | from_yaml }}"
+      tags:
+        dotoken
+    
+    - name: deploy kubeconfig from template
+      template:
+        src: kubeconfig.yml.j2
+        dest: "{{ kubeconfig }}"
+        mode: 0600
+        backup: no
+    
+    - name: deploy ingress controller
+      command: "{{ kubectlbin }} create -f {{ item }}"
+      with_items:
+        - "https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml"
+        - "https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml"
+    
+    - name: deploy external-dns for DO manifest template
+      template:
+        src: external-dns.yml.j2
+        dest: "{{ external_dns_config }}"
+        mode: 0600
+        backup: no
+      tags:
+        - dns
+    
+    - name: deploy external-dns
+      command: "{{ kubectlbin }} create -f {{ external_dns_config }}"
+      tags:
+        - dns
+
+    - name: see if secret exists for docker repo
+      command: "{{ kubectlbin }} get secret {{ k8s_docker_secret_name }}"
+      ignore_errors: true
+      register: secretchk
+      tags:
+        - imgdeploy
+
+    - debug:
+        msg: "{{ secretchk }}"
+
+    - name: kompose up
+      shell: "KUBECONFIG={{ kubeconfig }} kompose up -f ../docker-compose.yml"
+      tags:
+        - kompose
+        - imgdeploy
+
+    - name: put docker repo secret in place
+      command: "{{ kubectlbin }} create secret docker-registry {{ k8s_docker_secret_name }} --docker-server={{ docker_repo }} --docker-username={{ docker_repo_username }} --docker-password={{ docker_repo_pass }} --docker-email={{ docker_repo_email }}"
+      when: secretchk.stdout_lines | length < 1
+      tags:
+        - imgdeploy
+
+    - name: patch deployment to use docker creds
+      shell: "{{ kubectlbin }} patch deployment app -p '{{ k8s_deployment_patch | to_yaml }}'"
+      tags:
+        - kompose
+        - imgdeploy

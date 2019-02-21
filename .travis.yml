@@ -14,6 +14,11 @@ cache:
 install:
 - npm install
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+- curl -L https://github.com/kubernetes/kompose/releases/download/v1.17.0/kompose-linux-amd64 -o kompose  && chmod +x kompose && sudo mv ./kompose /usr/local/bin/kompose
+- sudo apt-get update
+- sudo apt-get install software-properties-common
+- sudo apt-add-repository --yes --update ppa:ansible/ansible
+- sudo apt-get install ansible
 script:
 - xvfb-run npm run test
 after_success:
@@ -22,7 +27,6 @@ after_success:
 - docker login -u $TREESCALE_USERNAME -p $TREESCALE_PASSWORD
 - docker build -t $TREESCALE_USERNAME/$PROJECT_NAME .
 - docker push $TREESCALE_USERNAME/$PROJECT_NAME:latest
-- kubectl --kubeconfig="$PROJECT_NAME-kubeconfig.yaml" get nodes
-- kubectl --kubeconfig="$PROJECT_NAME-kubeconfig.yaml" run ozark-login-api --image="hub.docker.com/r/colinskeep/ozark-login/api:latest" --port="9000"
+- ansible-playbook deploy/deploy_to_k8s.yml -i localhost, -e @/some/file/with/credentials.yml
 notifications:
   email: false
