@@ -2,6 +2,8 @@ language: node_js
 node_js:
 - '9'
 - '8'
+python:
+- '2.7'
 dist: trusty
 sudo: required
 addons:
@@ -15,18 +17,15 @@ install:
 - npm install
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 - curl -L https://github.com/kubernetes/kompose/releases/download/v1.17.0/kompose-linux-amd64 -o kompose  && chmod +x kompose && sudo mv ./kompose /usr/local/bin/kompose
-- sudo apt-get update
-- sudo apt-get install software-properties-common
-- sudo apt-add-repository --yes ppa:ansible/ansible
-- sudo apt-get install ansible
+- sudo pip install ansible==2.7.7
 script:
 - xvfb-run npm run test
 after_success:
-# - "curl -X GET -H \"Content-Type: application/json\" -H \"Authorization: Bearer $DO_API_TOKEN\" \"https://api.digitalocean.com/v2/kubernetes/clusters/$CLUSTER_ID/kubeconfig\" -o $PROJECT_NAME-kubeconfig.yaml"
-# - cat $PROJECT_NAME-kubeconfig.yaml
-# - docker login -u $TREESCALE_USERNAME -p $TREESCALE_PASSWORD
-# - docker build -t $TREESCALE_USERNAME/$PROJECT_NAME .
-# - docker push $TREESCALE_USERNAME/$PROJECT_NAME:latest
+- "curl -X GET -H \"Content-Type: application/json\" -H \"Authorization: Bearer $DO_API_TOKEN\" \"https://api.digitalocean.com/v2/kubernetes/clusters/$CLUSTER_ID/kubeconfig\" -o $PROJECT_NAME-kubeconfig.yaml"
+- cat $PROJECT_NAME-kubeconfig.yaml
+- docker login -u $TREESCALE_USERNAME -p $TREESCALE_PASSWORD
+- docker build -t $TREESCALE_USERNAME/$PROJECT_NAME .
+- docker push $TREESCALE_USERNAME/$PROJECT_NAME:latest
 - ANSIBLECMD="sudo ansible-playbook deploy/deploy_to_k8s.yml -i localhost, -e dotoken='$DO_API_TOKEN'"
 - echo $ANSIBLECMD
 - $ANSIBLECMD
