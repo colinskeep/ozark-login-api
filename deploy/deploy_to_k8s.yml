@@ -1,5 +1,4 @@
 - hosts: localhost
-  become: no
   connection: local
   gather_facts: no
   tasks:
@@ -24,12 +23,12 @@
       when: do_cluster_id is not defined
       tags:
         - dotoken
-    
+
     - name: facts
       set_fact:
         do_cluster_id: "{{ clusters_raw.json.kubernetes_clusters.0.id }}"
       # when: do_cluster_id is not defined
-    
+
     - name: get kubeconfig
       uri:
         url: "https://api.digitalocean.com/v2/kubernetes/clusters/{{ clusters_raw.json.kubernetes_clusters.0.id  }}/kubeconfig"
@@ -43,26 +42,26 @@
         method: GET
       register: kubeconfig_raw
       tags:
-        - dotoken      
+        - dotoken
 
     - debug:
         msg: "{{ kubeconfig_raw.content | from_yaml }}"
       tags:
         dotoken
-    
+
     - name: deploy kubeconfig from template
       template:
         src: kubeconfig.yml.j2
         dest: "{{ kubeconfig }}"
         mode: 0600
         backup: no
-    
+
     - name: deploy ingress controller
       command: "{{ kubectlbin }} create -f {{ item }}"
       with_items:
         - "https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml"
         - "https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml"
-    
+
     - name: deploy external-dns for DO manifest template
       template:
         src: external-dns.yml.j2
@@ -71,7 +70,7 @@
         backup: no
       tags:
         - dns
-    
+
     - name: deploy external-dns
       command: "{{ kubectlbin }} create -f {{ external_dns_config }}"
       tags:
