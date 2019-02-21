@@ -3,8 +3,8 @@ services:
   app:
     container_name: ozark-login-api
     restart: always
-    build: ./
-    image: hub.docker.com/r/colinskeep/ozark-login-api
+    #build: ./
+    image: colinskeep/ozark-login-api
     labels:
       kompose.volume.size: "2G"
       kompose.service.expose: "api.websmite.net"
