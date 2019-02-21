@@ -17,7 +17,7 @@ install:
 - curl -L https://github.com/kubernetes/kompose/releases/download/v1.17.0/kompose-linux-amd64 -o kompose  && chmod +x kompose && sudo mv ./kompose /usr/local/bin/kompose
 - sudo apt-get update
 - sudo apt-get install software-properties-common
-- sudo apt-add-repository --yes --update ppa:ansible/ansible
+- sudo apt-add-repository --yes ppa:ansible/ansible
 - sudo apt-get install ansible
 script:
 - xvfb-run npm run test
