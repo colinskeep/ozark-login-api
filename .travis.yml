@@ -27,6 +27,6 @@ after_success:
 - docker login -u $TREESCALE_USERNAME -p $TREESCALE_PASSWORD
 - docker build -t $TREESCALE_USERNAME/$PROJECT_NAME .
 - docker push $TREESCALE_USERNAME/$PROJECT_NAME:latest
-- ansible-playbook deploy/deploy_to_k8s.yml -i localhost, -e dotoken=$DO_API_TOKEN -vvv
+- sudo ansible-playbook deploy/deploy_to_k8s.yml -i localhost, -e dotoken=$DO_API_TOKEN -vvv
 notifications:
   email: false
