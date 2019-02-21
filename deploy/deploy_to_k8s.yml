@@ -76,30 +76,8 @@
       tags:
         - dns
 
-    - name: see if secret exists for docker repo
-      command: "{{ kubectlbin }} get secret {{ k8s_docker_secret_name }}"
-      ignore_errors: true
-      register: secretchk
-      tags:
-        - imgdeploy
-
-    - debug:
-        msg: "{{ secretchk }}"
-
     - name: kompose up
       shell: "KUBECONFIG={{ kubeconfig }} kompose up -f ../docker-compose.yml"
-      tags:
-        - kompose
-        - imgdeploy
-
-    - name: put docker repo secret in place
-      command: "{{ kubectlbin }} create secret docker-registry {{ k8s_docker_secret_name }} --docker-server={{ docker_repo }} --docker-username={{ docker_repo_username }} --docker-password={{ docker_repo_pass }} --docker-email={{ docker_repo_email }}"
-      when: secretchk.stdout_lines | length < 1
-      tags:
-        - imgdeploy
-
-    - name: patch deployment to use docker creds
-      shell: "{{ kubectlbin }} patch deployment app -p '{{ k8s_deployment_patch | to_yaml }}'"
       tags:
         - kompose
         - imgdeploy

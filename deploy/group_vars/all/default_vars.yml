@@ -2,10 +2,6 @@
 #You want to change the following
 #Provide via extra args using -e variable=value -e variable2=value2 if using TravisCI?
 ###
-docker_repo: hub.docker.com/$TREESCALE_USERNAME/r/$PROJECT_NAME
-docker_repo_username: $TREESCALE_USERNAME
-docker_repo_pass: $TREESCALE_PASSWORD
-docker_repo_email: $TREESCALE_EMAIL
 dotoken: $DO_API_TOKEN
 
 ###
