@@ -1,6 +1,5 @@
 const jwt = require('../components/jwt.js');
 const registrationModel = require('../models/registration.js');
-const bcrypt = require('bcrypt');
 
 /**
  * Function to execute when endpoint reached
