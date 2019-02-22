@@ -19,6 +19,7 @@ async function postLogin(req, res, next) {
       res.status(200).json({
         jwt: token,
         id: findLog.id,
+        name: findLog.name,
       });
     } else {
       res.status(200).json({error: findLog.valid});

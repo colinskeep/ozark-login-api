@@ -14,6 +14,7 @@ async function log(email, verificationCode) {
       return {
         data: true,
         id: emailExists._id,
+        name: emailExists.name,
       };
     } else {
       return false;
