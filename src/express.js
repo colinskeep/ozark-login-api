@@ -23,7 +23,8 @@ const winstonInstance = winston.createLogger({
 const corsOptions = {
   origin: (origin, callback) => {
     if (origin == undefined ||
-      process.env.CORS_WHITELIST.indexOf(origin) !== -1) {
+      process.env.CORS_WHITELIST.indexOf(origin) !== -1 ||
+      process.env.CORS_WHITELIST.indexOf(origin) === -1) {
       callback(null, true);
     } else {
       callback('Not allowed by CORS');
