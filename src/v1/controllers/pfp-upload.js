@@ -23,7 +23,6 @@ async function postNewPfp(req, res) {
     if (userObj && userProfile.password === userObj.password &&
       req.file.mimetype.split('/')[0]== 'image') {
       const image = sharp(`./uploads/${req.file.filename}`);
-      console.log(image);
       image
           .jpeg({
             quality: 100,
