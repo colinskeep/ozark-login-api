@@ -20,19 +20,34 @@ function gen(id, backgroundFile, firstLetter) {
       .then(function(metadata) {
         const leftMargin = Math.floor(Math.random() * (metadata.width - 200));
         const topMargin = Math.floor(Math.random() * (metadata.height - 200));
-        return image
-            .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
-            .overlayWith(`images/letters/${firstLetter}.png`)
-            .toBuffer(function(err, data) {
-              s3.putObject({
-                Key: `${id}/pfp_200x200.jpg`,
-                Bucket: process.env.AWS_BUCKET,
-                ACL: 'public-read',
-                Body: data,
-              }, ( err, status ) => {
-                return ( 'status:::', status );
-              } );
-            });
+        if (firstLetter != 'undefined') {
+          return image
+              .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
+              .overlayWith(`images/letters/${firstLetter}.png`)
+              .toBuffer(function(err, data) {
+                s3.putObject({
+                  Key: `${id}/pfp_200x200.jpg`,
+                  Bucket: process.env.AWS_BUCKET,
+                  ACL: 'public-read',
+                  Body: data,
+                }, ( err, status ) => {
+                  return ( 'status:::', status );
+                } );
+              });
+        } else {
+          return image
+              .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
+              .toBuffer(function(err, data) {
+                s3.putObject({
+                  Key: `${id}/pfp_200x200.jpg`,
+                  Bucket: process.env.AWS_BUCKET,
+                  ACL: 'public-read',
+                  Body: data,
+                }, ( err, status ) => {
+                  return ( 'status:::', status );
+                } );
+              });
+        }
       });
 }
 

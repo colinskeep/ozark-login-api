@@ -14,11 +14,15 @@ async function postValidate(req, res, next) {
     const code = req.body.code;
     const userObj = await jwt.resolve(token);
     const verifyCode = await verify.log(userObj.email, code);
+    const firstLetter = (userObj.name.match(/[a-zA-Z]/) == null) ?
+     'undefined' :
+      (userObj.name.match(/[a-zA-Z]/) || []).pop().toUpperCase();
     if (verifyCode.data === true) {
-      await pfp.gen(verifyCode.id, 'images/background.jpg', (userObj.name.match(/[a-zA-Z]/) || []).pop().toUpperCase());
+      await pfp.gen(verifyCode.id, 'images/background.jpg', firstLetter);
       res.status(200).json({
         data: true,
         id: verifyCode.id,
+        name: verifyCode.name,
       });
     } else {
       res.status(200).json({data: false});

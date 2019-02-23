@@ -1,8 +1,7 @@
 const jwt = require('../components/jwt.js');
 const aws = require('aws-sdk');
 const registrationModel = require('../models/registration.js');
-const multer = require('multer');
-const multerS3 = require('multer-s3');
+const sharp = require('sharp');
 
 aws.config.update({
   secretAccessKey: process.env.AWS_SECRET,
@@ -18,23 +17,36 @@ const s3 = new aws.S3();
  */
 async function postNewPfp(req, res) {
   try {
-    console.log("this file:", req.file);
     const token = req.headers.authorization.split(' ')[1];
     const userObj = await jwt.resolve(token);
     const userProfile = await registrationModel.findOne({email: userObj.email});
-    if (userObj && userProfile.password === userObj.password) {
-      multer({
-        storage: multerS3({
-          s3: s3,
-          bucket: process.env.AWS_BUCKET,
-          key: function(req, file, cb) {
-            cb(null, Date.now().toString());
-          },
-        }),
-      });
-      res.status(200).json({data: true});
+    if (userObj && userProfile.password === userObj.password &&
+      req.file.mimetype.split('/')[0]== 'image') {
+      const image = sharp(`./uploads/${req.file.filename}`);
+      console.log(image);
+      image
+          .jpeg({
+            quality: 100,
+            chromaSubsampling: '4:4:4',
+          })
+          .resize({
+            width: 200,
+            height: 200,
+          })
+          .toBuffer(function(err, data) {
+            s3.putObject({
+              Key: `${userProfile.id}/pfp_200x200.jpg`,
+              Bucket: process.env.AWS_BUCKET,
+              ACL: 'public-read',
+              Body: data,
+            }, ( err, status ) => {
+              if (err) throw err;
+              res.status(200).json({data: true});
+            });
+          });
     }
   } catch (err) {
+    res.status(400).json({data: err});
     console.log(err);
   }
 }
