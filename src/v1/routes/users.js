@@ -2,7 +2,10 @@ const express = require('express');
 const validate = require('express-validation');
 const searchController = require('../controllers/search.js');
 const profileController = require('../controllers/profile.js');
+const pfpController = require('../controllers/pfp-upload.js');
 const router = new express.Router();
+const multer = require('multer');
+const upload = multer({dest: './uploads/'});
 
 const search = require('./validators/search.js');
 const profile = require('./validators/profile.js');
@@ -15,5 +18,8 @@ router.route('/profile/').get(
 
 router.route('/profile/').post(
     validate(profile.validate), profileController.postUser);
+
+router.route('/profile/upload-pfp/').post(
+    validate(profile.validate), upload.single('image'), pfpController.postNewPfp);
 
 module.exports = router;
