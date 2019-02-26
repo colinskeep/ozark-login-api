@@ -12,6 +12,21 @@ const registrationSchema = new mongoose.Schema({
   gender: {type: String},
   verificationCode: {type: Number},
   verifiedEmail: {type: Boolean},
+  language: {type: String},
+  timeZone: {type: String},
+  currency: {type: String},
+  visibility: {type: String},
+  messages: {type: String},
+  emailNotifications: {
+    message: Boolean,
+    follow: Boolean,
+    newsletter: Boolean,
+  },
+  alertNotifications: {
+    message: Boolean,
+    follow: Boolean,
+    newsletter: Boolean,
+  },
 });
 
 module.exports = mongoose.model('registration', registrationSchema);
