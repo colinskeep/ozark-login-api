@@ -6,6 +6,7 @@ const pfpController = require('../controllers/pfp-upload.js');
 const prefController = require('../controllers/preferences.js');
 const notifController = require('../controllers/notifications.js');
 const passController = require('../controllers/password.js');
+const feedbackController = require('../controllers/feedback.js');
 
 const router = new express.Router();
 const multer = require('multer');
@@ -16,6 +17,7 @@ const profile = require('./validators/profile.js');
 const preferences = require('./validators/preferences.js');
 const notifications = require('./validators/notifications.js');
 const password = require('./validators/password.js');
+const feedback = require('./validators/feedback.js');
 
 router.route('/search/').post(
     validate(search.validate), searchController.postSearch);
@@ -43,5 +45,8 @@ router.route('/notifications/').post(
 
 router.route('/password/').post(
     validate(password.validate), passController.postPass);
+
+router.route('/feedback/').post(
+    validate(feedback.validate), feedbackController.postFb);
 
 module.exports = router;
