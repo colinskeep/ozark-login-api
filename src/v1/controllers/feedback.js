@@ -14,11 +14,10 @@ async function postFb(req, res, next) {
     const userObj = await jwt.resolve(token);
     const userProfile = await registrationModel.findOne({email: userObj.email});
     if (userObj && userProfile.password === userObj.password) {
-      await feedbackModel.findOneAndUpdate({email: userObj.email},
-          {$set: {email: userObj.email,
-            feedback: req.body.feedback,
-          }},
-          {upsert: true});
+      await feedbackModel.create({
+        email: userObj.email,
+        feedback: req.body.feedback,
+      });
       res.status(200).json({data: true});
     } else {
       res.status(400).json({data: false});
