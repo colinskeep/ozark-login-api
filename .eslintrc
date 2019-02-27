@@ -11,5 +11,6 @@
   "rules": {
     "max-len": "off",
     "no-var": "off",
+    "no-console": "off",
     }
 }

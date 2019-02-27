@@ -22,7 +22,7 @@ async function getPref(req, res, next) {
       });
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 }
 
@@ -49,7 +49,7 @@ async function postPref(req, res, next) {
       res.status(200).json({data: true});
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 }
 

@@ -23,7 +23,7 @@ async function getNotif(req, res, next) {
       });
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 }
 
@@ -56,7 +56,7 @@ async function postNotif(req, res, next) {
       res.status(200).json({data: true});
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 }
 
