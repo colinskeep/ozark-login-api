@@ -9,7 +9,19 @@ async function log(email, verificationCode) {
     const emailExists = await registrationModel.findOne({email: email});
     if (emailExists.verificationCode == verificationCode) {
       await registrationModel.findOneAndUpdate({email},
-          {$set: {verifiedEmail: true}},
+          {$set: {
+            verifiedEmail: true,
+            emailNotifications: {
+              message: true,
+              follow: true,
+              newsletter: true,
+            },
+            alertNotifications: {
+              message: true,
+              follow: true,
+              newsletter: true,
+            },
+          }},
           {upsert: true});
       return {
         data: true,

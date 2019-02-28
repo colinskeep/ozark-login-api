@@ -16,7 +16,7 @@ async function postFb(req, res, next) {
     if (userObj && userProfile.password === userObj.password) {
       await feedbackModel.create({
         email: userObj.email,
-        feedback: req.body.feedback,
+        feedback: req.body.message,
       });
       res.status(200).json({data: true});
     } else {

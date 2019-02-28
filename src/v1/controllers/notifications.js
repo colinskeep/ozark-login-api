@@ -12,7 +12,7 @@ async function getNotif(req, res, next) {
     const token = req.headers.authorization.split(' ')[1];
     const userObj = await jwt.resolve(token);
     const userProfile = await registrationModel.findOne({email: userObj.email});
-    if (userProfile && userProfile.password === userObj.password) {
+    if (userProfile.emailNotifications && userProfile.password === userObj.password) {
       res.status(200).json({
         emailMessage: userProfile.emailNotifications.message,
         emailFollow: userProfile.emailNotifications.follow,
