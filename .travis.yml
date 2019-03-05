@@ -14,8 +14,7 @@ cache:
   directories:
   - node_modules
 before_install:
-- openssl aes-256-cbc -K $key -iv $iv
-  -in .env.enc -out .env -d
+- openssl aes-256-cbc -K $key -iv $iv -in .env.enc -out .env -d
 install:
 - npm install
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl
