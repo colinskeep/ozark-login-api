@@ -3,6 +3,7 @@
 #Provide via extra args using -e variable=value -e variable2=value2 if using TravisCI?
 ###
 dotoken: $DO_API_TOKEN
+tag: $TRAVIS_COMMIT
 
 ###
 #Below are variables you can probably leave alone

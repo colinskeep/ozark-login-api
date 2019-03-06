@@ -1,0 +1,137 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: create k8s cluster
+      uri:
+        url: "https://api.digitalocean.com/v2/kubernetes/clusters"
+        headers:
+          Authorization: "Bearer {{ dotoken }}"
+          Accept: 'application/json'
+        body:
+          name: {{ tag }}
+          region: sfo2
+          version: 1.13.3-do.0
+          node_pools:
+            - size: s-1vcpu-2gb
+              count: 1
+              name: frontend-pool
+              tags:
+                - {{ tag }}
+        body_format: json
+        return_content: yes
+        status_code: 201
+        method: POST
+      register: clusters_raw
+      when: do_cluster_id is not defined
+      tags:
+        - dotoken
+
+    - debug:
+        msg: "{{ clusters_raw }}"
+      when: do_cluster_id is not defined
+      tags:
+        - dotoken
+
+    - name: facts
+      set_fact:
+        do_cluster_id: "{{ clusters_raw.json.kubernetes_cluster.id }}"
+
+      # when: do_cluster_id is not defined
+
+    - pause:
+        minutes: 5
+
+    - name: get kubeconfig
+      uri:
+        url: "https://api.digitalocean.com/v2/kubernetes/clusters/{{ clusters_raw.json.kubernetes_cluster.id  }}/kubeconfig"
+        headers:
+          Authorization: "Bearer {{ dotoken }}"
+          Accept: 'application/json'
+        validate_certs: no
+        follow_redirects: all
+        return_content: yes
+        status_code: 200
+        method: GET
+      register: kubeconfig_raw
+      tags:
+        - dotoken
+
+    - debug:
+        msg: "{{ kubeconfig_raw.content | from_yaml }}"
+      tags:
+        dotoken
+
+    - name: list load balancers
+      uri:
+        url: "https://api.digitalocean.com/v2/load_balancers"
+        headers:
+          Authorization: "Bearer {{ dotoken }}"
+          Accept: 'application/json'
+        return_content: yes
+        status_code: 200
+        method: GET
+      register: loadbalancers_raw
+      when: load_balancer_id is not defined
+      tags:
+        - loadbalancers
+
+    - debug:
+        msg: "{{ loadbalancers_raw.json.load_balancers.0.id }}"
+      when: load_balancer_id is not defined
+      tags:
+        - loadbalancers
+
+    - name: facts
+      set_fact:
+        load_balancer_id: "{{ loadbalancers_raw.json.load_balancers.0.id }}"
+
+    - name: list droplets
+      uri:
+        url: "https://api.digitalocean.com/v2/droplets?tag_name={{ tag }}"
+        headers:
+          Authorization: "Bearer {{ dotoken }}"
+          Accept: 'application/json'
+        return_content: yes
+        status_code: 200
+        method: GET
+      register: new_droplet
+      when: new_droplet is not defined
+      tags:
+        - droplets
+
+    - debug:
+        msg: "{{ new_droplet }}"
+      when: new_droplet is not defined
+      tags:
+        - droplets
+
+    - name: add node to balancer
+      uri:
+        url: "https://api.digitalocean.com/v2/load_balancers/{{ loadbalancers_raw.json.load_balancers.0.id }}/droplets"
+        headers:
+          Authorization: "Bearer {{ dotoken }}"
+          Accept: 'application/json'
+        body:
+          droplet_ids:
+            - "{{ new_droplet.json.droplets.0.id }}"
+        body_format: json
+        return_content: yes
+        status_code: 204
+        method: POST
+      register: clusters_raw
+      tags:
+        - loadbalancers
+
+    - name: deploy kubeconfig from template
+      template:
+        src: kubeconfig.yml.j2
+        dest: "{{ kubeconfig }}"
+        mode: 0600
+        backup: no
+
+    - name: kompose up
+      shell: "KUBECONFIG={{ kubeconfig }} kompose up -f ../docker-compose.yml"
+      tags:
+        - kompose
+        - imgdeploy
