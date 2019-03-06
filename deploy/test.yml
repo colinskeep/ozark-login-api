@@ -9,7 +9,7 @@
           Authorization: "Bearer {{ dotoken }}"
           Accept: 'application/json'
         body:
-          name: {{ tag }}
+          name: "{{ tag }}"
           region: sfo2
           version: 1.13.3-do.0
           node_pools:
@@ -17,7 +17,7 @@
               count: 1
               name: frontend-pool
               tags:
-                - {{ tag }}
+                - "{{ tag }}"
         body_format: json
         return_content: yes
         status_code: 201
