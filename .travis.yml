@@ -26,7 +26,7 @@ after_success:
 - docker login -u $TREESCALE_USERNAME -p $TREESCALE_PASSWORD
 - docker build -t $TREESCALE_USERNAME/$PROJECT_NAME .
 - docker push $TREESCALE_USERNAME/$PROJECT_NAME:latest
-- ANSIBLECMD='sudo ansible-playbook deploy/test.yml -i localhost --extra-vars "dotoken='$DO_API_TOKEN' tag='$TRAVIS_COMMIT'"'
+- ANSIBLECMD="sudo ansible-playbook deploy/test.yml -i localhost -e dotoken='$DO_API_TOKEN' -e tag='$TRAVIS_COMMIT'"
 - echo $ANSIBLECMD
 - "$ANSIBLECMD"
 notifications:
