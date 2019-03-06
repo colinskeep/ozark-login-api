@@ -41,6 +41,7 @@
 
     - pause:
         minutes: 5
+     # delay 30 sec, download kubeconfig, check status of droplet until ready
 
     - name: get kubeconfig
       uri:
