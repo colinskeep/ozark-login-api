@@ -15,7 +15,7 @@ const s3 = new aws.S3();
  * @param {string} res - outgoing response
  * @param {string} next - move on
  */
-async function postNewPfp(req, res) {
+async function postNewPfb(req, res) {
   try {
     const token = req.headers.authorization.split(' ')[1];
     const userObj = await jwt.resolve(token);
@@ -53,5 +53,5 @@ async function postNewPfp(req, res) {
 
 
 module.exports = {
-  postNewPfp,
+  postNewPfb,
 };
