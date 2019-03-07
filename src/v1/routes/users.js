@@ -7,6 +7,7 @@ const prefController = require('../controllers/preferences.js');
 const notifController = require('../controllers/notifications.js');
 const passController = require('../controllers/password.js');
 const feedbackController = require('../controllers/feedback.js');
+const pfbController = require('../controllers/pfb-upload.js');
 
 const router = new express.Router();
 const multer = require('multer');
@@ -30,6 +31,9 @@ router.route('/profile/').post(
 
 router.route('/profile/upload-pfp/').post(
     validate(profile.validate), upload.single('image'), pfpController.postNewPfp);
+
+router.route('/profile/upload-pfb/').post(
+    validate(profile.validate), upload.single('image'), pfbController.postNewPfb);
 
 router.route('/preferences/').post(
     validate(preferences.validate), prefController.postPref);
