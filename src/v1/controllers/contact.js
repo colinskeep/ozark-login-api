@@ -10,10 +10,10 @@ async function postContact(req, res, next) {
   try {
     if (req.body) {
       await contactModel.create({
-        inquiry: req.body.inquiry,
+        enquiry: req.body.enquiry,
         name: req.body.name,
         email: req.body.email,
-        feedback: req.body.message,
+        message: req.body.message,
       });
       res.status(200).json({data: true});
     } else {
