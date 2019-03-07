@@ -8,7 +8,7 @@ sudo: required
 addons:
   firefox: latest
 services:
-- docker
+##- docker
 cache:
   directories:
   - node_modules
@@ -16,17 +16,17 @@ before_install:
 - openssl aes-256-cbc -K $key -iv $iv -in .env.enc -out .env -d
 install:
 - npm install
-- curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
-- curl -L https://github.com/kubernetes/kompose/releases/download/v1.17.0/kompose-linux-amd64 -o kompose  && chmod +x kompose && sudo mv ./kompose /usr/local/bin/kompose
-- sudo pip install ansible==2.7.7
+##- curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+##- curl -L https://github.com/kubernetes/kompose/releases/download/v1.17.0/kompose-linux-amd64 -o kompose  && chmod +x kompose && sudo mv ./kompose /usr/local/bin/kompose
+##- sudo pip install ansible==2.7.7
 script:
 - xvfb-run npm run test
 after_success:
-- docker login -u $TREESCALE_USERNAME -p $TREESCALE_PASSWORD
-- docker build -t $TREESCALE_USERNAME/$PROJECT_NAME .
-- docker push $TREESCALE_USERNAME/$PROJECT_NAME:latest
-- ANSIBLECMD="sudo ansible-playbook deploy/deploy_to_k8s.yml -i localhost -e dotoken='$DO_API_TOKEN' -e tag='$TRAVIS_COMMIT'"
-- echo $ANSIBLECMD
-- "$ANSIBLECMD"
+##- docker login -u $TREESCALE_USERNAME -p $TREESCALE_PASSWORD
+##- docker build -t $TREESCALE_USERNAME/$PROJECT_NAME .
+##- docker push $TREESCALE_USERNAME/$PROJECT_NAME:latest
+##- ANSIBLECMD="sudo ansible-playbook deploy/deploy_to_k8s.yml -i localhost -e dotoken='$DO_API_TOKEN' -e tag='$TRAVIS_COMMIT'"
+##- echo $ANSIBLECMD
+##- "$ANSIBLECMD"
 notifications:
   email: false
