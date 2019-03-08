@@ -42,8 +42,8 @@ async function getToken(req, res) {
  */
 async function getApiKeys(req, res) {
   try {
-    console.log(req.params.oauthtoken);
-    console.log(req.params.oauth_verifier);
+    console.log(req.query.oauth_token);
+    console.log(req.query.oauth_verifier);
   } catch (err) {
     console.log(err);
   }
