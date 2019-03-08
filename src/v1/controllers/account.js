@@ -20,13 +20,13 @@ async function getToken(req, res) {
           consumer_key: process.env.TWITTER_CONSUMER_KEY,
           consumer_secret: process.env.TWITTER_SECRET_KEY,
         },
-      }, function(err, e, body) {
+      }, async function(err, e, body) {
         if (err) {
           return res.send(500, {message: e.message});
         }
         var jsonStr = JSON.parse('{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
-        console.log(userProfile.email);
-        registrationModel.findOneAndUpdate({email: userProfile.email},
+        console.log(userProfile.email, jsonStr.oauth_token, jsonStr.oauth_token_secret);
+        await registrationModel.findOneAndUpdate({email: userProfile.email},
             {$set: {
               twitter: {
                 oauth_token: jsonStr.oauth_token,
