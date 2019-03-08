@@ -66,7 +66,7 @@ async function getApiKeys(req, res) {
     }, async function(err, e, body) {
       var jsonStr = JSON.parse('{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
       console.log('____________________________', req.query.oauth_token, jsonStr);
-      await registrationModel.findOneAndUpdate({twitter: {oauth_token: req.query.oauth_token}},
+      await registrationModel.findOneAndReplace({twitter: {oauth_token: req.query.oauth_token}},
           {$set: {
             twitter: {
               oauth_token: jsonStr.oauth_token,
