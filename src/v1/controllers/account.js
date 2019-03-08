@@ -32,7 +32,7 @@ async function getToken(req, res) {
                 oauth_secret: jsonStr.oauth_secret,
               },
             }});
-        res.send(JSON.parse(jsonStr));
+        res.send(jsonStr);
       });
     }
   } catch (err) {
