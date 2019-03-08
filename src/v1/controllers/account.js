@@ -66,17 +66,16 @@ async function getApiKeys(req, res) {
     }, async function(err, e, body) {
       var jsonStr = JSON.parse('{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
       console.log('____________________________', req.query.oauth_token, jsonStr);
-      const data = await registrationModel.find({'twitter.oauth_token': req.query.oauth_token});
+      const data = await registrationModel.findOne({'twitter.oauth_token': req.query.oauth_token});
       console.log(data);
-      await registrationModel.findOneAndUpdate({'twitter.oauth_token': req.query.oauth_token},
+      await registrationModel.findOneAndUpdate({email: data.email},
           {$set: {
-            'twitter.$.oauth_access_token': jsonStr.oauth_token,
-            'twitter.$.loggedIn': true,
+            twitter: {
+              oauth_access_token: jsonStr.oauth_token,
+              loggedIn: true,
+            },
           }},
-          function(err, doc) {
-            if (err) throw err;
-            console.log(doc);
-          });
+          {upsert: true});
       res.redirect('https://dev.eostokens.app/settings/accounts/');
     });
   } catch (err) {
