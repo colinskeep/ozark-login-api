@@ -24,8 +24,7 @@ async function getToken(req, res) {
         if (err) {
           return res.send(500, {message: e.message});
         }
-        console.log(body);
-        var jsonStr = '{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}';
+        var jsonStr = JSON.parse('{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
         console.log(jsonStr);
         res.send(JSON.parse(jsonStr));
       });
