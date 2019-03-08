@@ -25,7 +25,8 @@ async function getToken(req, res) {
           return res.send(500, {message: e.message});
         }
         var jsonStr = JSON.parse('{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
-        console.log(userProfile.email, jsonStr.oauth_token, jsonStr.oauth_token_secret);
+        jsonStr.push({oauthNonse: Math.floor(Math.random()*90000000) + 10000000});
+        jsonStr.push({oauthTimestamp: (new Date).getTime()});
         registrationModel.findOneAndUpdate({email: userProfile.email},
             {$set: {
               twitter: {
@@ -34,6 +35,7 @@ async function getToken(req, res) {
               },
             }},
             {upsert: true});
+        console.log('****************', jsonStr);
         res.send(jsonStr);
       });
     }
