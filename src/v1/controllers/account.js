@@ -25,13 +25,15 @@ async function getToken(req, res) {
           return res.send(500, {message: e.message});
         }
         var jsonStr = JSON.parse('{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
+        console.log(userProfile.email);
         registrationModel.findOneAndUpdate({email: userProfile.email},
             {$set: {
               twitter: {
                 oauth_token: jsonStr.oauth_token,
-                oauth_secret: jsonStr.oauth_secret,
+                oauth_secret: jsonStr.oauth_token_secret,
               },
-            }});
+            }}
+        );
         res.send(jsonStr);
       });
     }
