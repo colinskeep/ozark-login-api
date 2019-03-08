@@ -29,6 +29,7 @@ const registrationSchema = new mongoose.Schema({
   },
   twitter: {
     oauth_token: String,
+    oauth_access_token: String,
     loggedIn: Boolean,
   },
   lastSeen: {type: String},
