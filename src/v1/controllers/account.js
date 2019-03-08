@@ -25,8 +25,9 @@ async function getToken(req, res) {
           return res.send(500, {message: e.message});
         }
         var jsonStr = JSON.parse('{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
-        jsonStr.push({oauthNonse: Math.floor(Math.random()*90000000) + 10000000});
-        jsonStr.push({oauthTimestamp: (new Date).getTime()});
+        jsonStr.oauth_nonse = Math.floor(Math.random()*90000000) + 10000000;
+        jsonStr.oauth_timestamp = (new Date).getTime();
+        jsonStr.oauth_consumer_key = process.env.TWITTER_CONSUMER_KEY;
         registrationModel.findOneAndUpdate({email: userProfile.email},
             {$set: {
               twitter: {
