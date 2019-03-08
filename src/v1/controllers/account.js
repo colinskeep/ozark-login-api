@@ -59,20 +59,21 @@ async function getApiKeys(req, res) {
         oauth_verifier: req.query.oauth_verifier,
       },
     }, function(err, e, body) {
-      console.log(body)
+      console.log(body);
 
-    //   registrationModel.findOneAndUpdate({twitter: req.query.oauth_token},
-    //       {$set: {
-    //         twitter: {
-    //           oauth_verifier: req.query.oauth_verifier,
-    //         },
-    //       }},
-    //       {upsert: true});
-    // });
+      //   registrationModel.findOneAndUpdate({twitter: req.query.oauth_token},
+      //       {$set: {
+      //         twitter: {
+      //           oauth_verifier: req.query.oauth_verifier,
+      //         },
+      //       }},
+      //       {upsert: true});
+      // });
       res.redirect('https://dev.eostokens.app/settings/accounts/');
     });
-  }catch (err) {
-  console.log(err);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 module.exports = {
