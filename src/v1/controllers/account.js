@@ -64,6 +64,7 @@ async function getApiKeys(req, res) {
       form: {oauth_verifier: req.query.oauth_verifier},
     }, function(err, e, body) {
       var jsonStr = JSON.parse('{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
+      console.log('____________________________', req.query.oauth_token, jsonStr);
       registrationModel.findOneAndUpdate({twitter: {oauth_token: req.query.oauth_token}},
           {$set: {
             twitter: {
