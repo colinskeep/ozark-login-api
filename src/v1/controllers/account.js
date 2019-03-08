@@ -20,20 +20,20 @@ async function getToken(req, res) {
           consumer_key: process.env.TWITTER_CONSUMER_KEY,
           consumer_secret: process.env.TWITTER_SECRET_KEY,
         },
-      }, async function(err, e, body) {
+      }, function(err, e, body) {
         if (err) {
           return res.send(500, {message: e.message});
         }
         var jsonStr = JSON.parse('{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
         console.log(userProfile.email, jsonStr.oauth_token, jsonStr.oauth_token_secret);
-        await registrationModel.findOneAndUpdate({email: userProfile.email},
+        registrationModel.findOneAndUpdate({email: userProfile.email},
             {$set: {
               twitter: {
                 oauth_token: jsonStr.oauth_token,
                 oauth_secret: jsonStr.oauth_token_secret,
               },
-            }}
-        );
+            }},
+            {upsert: true});
         res.send(jsonStr);
       });
     }
@@ -51,9 +51,28 @@ async function getApiKeys(req, res) {
   try {
     console.log(req.query.oauth_token);
     console.log(req.query.oauth_verifier);
-  } catch (err) {
-    console.log(err);
-  }
+    request.post({
+      url: 'https://api.twitter.com/oauth/access_token',
+      oauth: {
+        oauth_consumer_key: process.env.TWITTER_CONSUMER_KEY,
+        oauth_token: req.query.oauth_token,
+        oauth_verifier: req.query.oauth_verifier,
+      },
+    }, function(err, e, body) {
+      console.log(body)
+
+    //   registrationModel.findOneAndUpdate({twitter: req.query.oauth_token},
+    //       {$set: {
+    //         twitter: {
+    //           oauth_verifier: req.query.oauth_verifier,
+    //         },
+    //       }},
+    //       {upsert: true});
+    // });
+      res.redirect('https://dev.eostokens.app/settings/accounts/');
+    });
+  }catch (err) {
+  console.log(err);
 }
 
 module.exports = {
