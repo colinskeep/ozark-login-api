@@ -52,12 +52,13 @@ async function getApiKeys(req, res) {
     console.log(req.query.oauth_token);
     console.log(req.query.oauth_verifier);
     request.post({
-      url: 'https://api.twitter.com/oauth/access_token',
+      url: 'https://api.twitter.com/oauth/access_token?oauth_verifier',
       oauth: {
-        oauth_consumer_key: process.env.TWITTER_CONSUMER_KEY,
-        oauth_token: req.query.oauth_token,
-        oauth_verifier: req.query.oauth_verifier,
+        consumer_key: process.env.TWITTER_CONSUMER_KEY,
+        consumer_secret: process.env.TWITTER_SECRET_KEY,
+        token: req.query.oauth_token,
       },
+      form: {oauth_verifier: req.query.oauth_verifier},
     }, function(err, e, body) {
       console.log(body);
 
