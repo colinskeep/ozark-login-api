@@ -20,7 +20,7 @@ async function getToken(req, res) {
           consumer_key: process.env.TWITTER_CONSUMER_KEY,
           consumer_secret: process.env.TWITTER_SECRET_KEY,
         },
-      }, function(err, e, body) {
+      }, async function(err, e, body) {
         if (err) {
           return res.send(500, {message: e.message});
         }
@@ -28,7 +28,8 @@ async function getToken(req, res) {
         jsonStr.oauth_nonse = Math.floor(Math.random()*90000000) + 10000000;
         jsonStr.oauth_timestamp = (new Date).getTime();
         jsonStr.oauth_consumer_key = process.env.TWITTER_CONSUMER_KEY;
-        registrationModel.findOneAndUpdate({email: userProfile.email},
+        console.log(userProfile.email);
+        await registrationModel.findOneAndUpdate({email: userProfile.email},
             {$set: {
               twitter: {
                 oauth_token: jsonStr.oauth_token,
