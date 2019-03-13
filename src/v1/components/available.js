@@ -10,9 +10,11 @@ async function userName(term) {
     const userNames = await registrationModel.findOne(
         {'username': term}, {username: 1}
     );
+    console.log(userNames);
     const restrictedWords = await restrictedWordsModel.findOne(
         {'restricted_word': term}, {username: 1}
     );
+    console.log(restrictedWords);
     const userExists = (userNames.length > 0) ? false : true;
     const allowedWords = (restrictedWords.length > 0) ? false : true;
     return {userExists, allowedWords};

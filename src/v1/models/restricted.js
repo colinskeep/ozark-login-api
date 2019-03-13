@@ -4,4 +4,4 @@ const restrictedWordSchema = new mongoose.Schema({
   restricted_word: {type: String, required: true, unique: true},
 });
 
-module.exports = mongoose.model('restrictedWords', restrictedWordSchema);
+module.exports = mongoose.model('restrictedwords', restrictedWordSchema);
