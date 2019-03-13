@@ -12,7 +12,7 @@ async function postAvailable(req, res) {
     if (searchResults && restrictedPath.indexOf(req.body.username.toLowerCase()) < 0) {
       res.status(200).json(searchResults);
     } else {
-      res.status(200).json({data: false});
+      res.status(200).json({nameAvailable: false, allowedWords: false});
     }
     return searchResults;
   } catch (err) {
