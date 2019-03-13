@@ -76,7 +76,7 @@ async function getApiKeys(req, res) {
             },
           }},
           {upsert: true});
-      res.redirect('https://dev.eostokens.app/settings/accounts/');
+      res.redirect('https://dev.eostokens.app/settings/accounts/?login=success');
     });
   } catch (err) {
     console.log(err);
