@@ -15,9 +15,9 @@ async function userName(term) {
         {'restricted_word': term}, {username: 1}
     );
     console.log(restrictedWords);
-    const userExists = (userNames.length > 0) ? false : true;
-    const allowedWords = (restrictedWords.length > 0) ? false : true;
-    return {userExists, allowedWords};
+    const nameAvailable = (userNames == null) ? true : false;
+    const allowedWords = (restrictedWords == null) ? true: false;
+    return {nameAvailable, allowedWords};
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(`logger log. ${err}`);
