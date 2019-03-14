@@ -1,4 +1,4 @@
-const available = require('components/available.js');
+const available = require('./available.js');
 
 /**
  * @param {string} emailPrefix - email username
