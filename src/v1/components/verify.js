@@ -6,6 +6,7 @@ const registrationModel = require('../models/registration.js');
  * @param {string} verificationCode - emailed code
 */
 async function log(email, username, verificationCode) {
+  console.log(username);
   try {
     const emailExists = await registrationModel.findOne({email: email});
     if (emailExists.verificationCode == verificationCode) {
