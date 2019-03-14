@@ -14,6 +14,7 @@ async function postValidate(req, res, next) {
     const token = req.headers.authorization.split(' ')[1];
     const code = req.body.code;
     const userObj = await jwt.resolve(token);
+    console.log(userObj);
     const emailPrefix = userObj.email.split('@')[0];
     const username = ungen.get(emailPrefix);
     console.log(username);
