@@ -1,6 +1,7 @@
 const available = require('components/available.js');
 
 /**
+ * @param {string} emailPrefix - email username
 */
 async function get(emailPrefix) {
   try {
