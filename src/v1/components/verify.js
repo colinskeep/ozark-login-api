@@ -2,15 +2,17 @@ const registrationModel = require('../models/registration.js');
 
 /**
  * @param {string} email - user email
+ * @param {string} username - user generated name
  * @param {string} verificationCode - emailed code
 */
-async function log(email, verificationCode) {
+async function log(email, username, verificationCode) {
   try {
     const emailExists = await registrationModel.findOne({email: email});
     if (emailExists.verificationCode == verificationCode) {
       await registrationModel.findOneAndUpdate({email},
           {$set: {
             verifiedEmail: true,
+            username: username,
             emailNotifications: {
               message: true,
               follow: true,
@@ -27,6 +29,7 @@ async function log(email, verificationCode) {
         data: true,
         id: emailExists._id,
         name: emailExists.name,
+        username: username,
       };
     } else {
       return false;
