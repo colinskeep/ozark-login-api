@@ -12,14 +12,13 @@ async function get(emailPrefix) {
       await get(retry);
     } else {
       console.log('un-gen.js: ', emailPrefix);
-      return emailPrefix;
+      return {emailPrefix};
     }
   } catch (error) {
     console.log(error);
   }
 }
 
-get('colinskeep');
 module.exports = {
   get,
 };

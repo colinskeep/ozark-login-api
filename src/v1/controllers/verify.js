@@ -18,7 +18,7 @@ async function postValidate(req, res, next) {
     const emailPrefix = await userObj.email.split('@')[0];
     console.log('email prefix: ', emailPrefix);
     const username = await ungen.get(emailPrefix);
-    console.log(username);
+    console.log('ungen.get: ', username);
     const verifyCode = await verify.log(userObj.email, username, code);
     console.log('verifyCode: ', verifyCode);
     const firstLetter = (userObj.name.match(/[a-zA-Z]/) == null) ?

@@ -22,11 +22,6 @@ async function postAvailable(req, res) {
     res.status(400);
   }
 }
-postAvailable({
-  body: {
-    username: 'colinskeep',
-  }
-})
 
 module.exports = {
   postAvailable,
