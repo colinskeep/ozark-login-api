@@ -12,7 +12,7 @@ async function get(emailPrefix) {
       return await get(retry);
     } else if (getUserName.nameAvailable == true) {
       console.log('un-gen.js: ', emailPrefix);
-      return {emailPrefix};
+      return emailPrefix;
     }
   } catch (error) {
     console.log(error);
