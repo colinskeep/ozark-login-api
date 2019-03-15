@@ -11,6 +11,7 @@ async function get(emailPrefix) {
       const retry = emailPrefix + (Math.floor(Math.random() * 900) + 99).toString();
       await get(retry);
     } else {
+      console.log('un-gen.js: ', emailPrefix);
       return emailPrefix;
     }
   } catch (error) {
