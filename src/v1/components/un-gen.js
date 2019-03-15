@@ -9,7 +9,7 @@ async function get(emailPrefix) {
     console.log(getUserName);
     if (getUserName.nameAvailable == false) {
       const retry = emailPrefix + (Math.floor(Math.random() * 900) + 99).toString();
-      get(retry);
+      return await get(retry);
     } else if (getUserName.nameAvailable == true) {
       console.log('un-gen.js: ', emailPrefix);
       return {emailPrefix};
