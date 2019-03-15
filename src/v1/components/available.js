@@ -7,14 +7,14 @@ const restrictedWordsModel = require('../models/restricted.js');
 */
 async function userName(term) {
   try {
+    console.log('available.js term: ', term);
     const userNames = await registrationModel.findOne(
-        {'username': term}, {username: 1}
+        {username: term}, {username: 1}
     );
-    console.log(userNames);
+    console.log('findOne query: ', userNames);
     const restrictedWords = await restrictedWordsModel.findOne(
         {'restricted_word': term}, {username: 1}
     );
-    console.log(restrictedWords);
     const nameAvailable = (userNames == null) ? true : false;
     const allowedWords = (restrictedWords == null) ? true: false;
     return {nameAvailable, allowedWords};

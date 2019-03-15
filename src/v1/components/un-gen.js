@@ -5,10 +5,11 @@ const available = require('./available.js');
 */
 async function get(emailPrefix) {
   try {
-    const getUserName = available.userName(emailPrefix);
+    const getUserName = await available.userName(emailPrefix);
+    console.log(getUserName);
     if (getUserName.nameAvailable == false) {
       const retry = emailPrefix + (Math.floor(Math.random() * 900) + 99).toString();
-      get(retry);
+      await get(retry);
     } else {
       return emailPrefix;
     }
@@ -17,6 +18,7 @@ async function get(emailPrefix) {
   }
 }
 
+get('colinskeep');
 module.exports = {
   get,
 };
