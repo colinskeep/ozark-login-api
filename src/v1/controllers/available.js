@@ -1,5 +1,6 @@
 const available = require('../components/available.js');
 const jwt = require('../components/jwt.js');
+const registrationModel = require('../models/registration.js');
 
 /**
  * Function to execute when endpoint reached
@@ -12,7 +13,8 @@ async function postAvailable(req, res) {
     if (req.headers.authorization) {
       const token = req.headers.authorization.split(' ')[1];
       const userObj = await jwt.resolve(token);
-      if (userObj.username == req.body.username) {
+      const userProfile = await registrationModel.findOne({email: userObj.email});
+      if (userProfile.username == req.body.username) {
         res.status(200).json({nameAvailable: true, allowedWords: true});
       }
     }
