@@ -15,11 +15,10 @@ async function newUser(req, res, next) {
     const followUser = await registrationModel.findOne({username: req.body.username});
     if (userObj && userProfile.password === userObj.password && followUser) {
       await registrationModel.findOneAndUpdate({email: userObj.email},
-          {$push: {following: req.body.username,
-          }},
+          {$push: {following: req.body.username}, $set: {followingCount: userProfile.following.length + 1}},
           {upsert: true});
       await registrationModel.findOneAndUpdate({email: followUser.email},
-          {$push: {followers: userProfile.username}},
+          {$push: {followers: userProfile.username}, $set: {followersCount: followUser.followers.length}},
           {upsert: true});
       res.status(200).json({data: true});
     }

@@ -35,6 +35,8 @@ const registrationSchema = new mongoose.Schema({
   lastSeen: {type: String},
   following: [String],
   followers: [String],
+  followingCount: {type: Number, default: 0},
+  followersCount: {type: Number, default: 0},
 });
 
 registrationSchema.pre('findOneAndUpdate', function() {
