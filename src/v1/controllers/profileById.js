@@ -10,6 +10,7 @@ async function getUser(req, res) {
     const userProfile = await registrationModel.findOne({username: req.query.username});
     if (userProfile) {
       res.status(200).json({
+        id: userProfile.id,
         name: userProfile.name,
         email: userProfile.email,
         username: userProfile.username,
@@ -18,6 +19,8 @@ async function getUser(req, res) {
         bio: userProfile.bio,
         dob: userProfile.dob,
         gender: userProfile.gender,
+        followers: userProfile.followers,
+        following: userProfile.following,
       });
     } else {
       res.status(200).json({
