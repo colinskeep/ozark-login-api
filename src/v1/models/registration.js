@@ -33,6 +33,8 @@ const registrationSchema = new mongoose.Schema({
     loggedIn: Boolean,
   },
   lastSeen: {type: String},
+  following: [String],
+  followers: [String],
 });
 
 registrationSchema.pre('findOneAndUpdate', function() {

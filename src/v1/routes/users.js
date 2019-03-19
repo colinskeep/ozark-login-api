@@ -10,6 +10,7 @@ const feedbackController = require('../controllers/feedback.js');
 const pfbController = require('../controllers/pfb-upload.js');
 const availableController = require('../controllers/available.js');
 const profileByIdController = require('../controllers/profileById.js');
+const followController = require('../controllers/follow.js');
 
 const router = new express.Router();
 const multer = require('multer');
@@ -23,6 +24,7 @@ const password = require('./validators/password.js');
 const feedback = require('./validators/feedback.js');
 const available = require('./validators/available.js');
 const users = require('./validators/user.js');
+const follow = require('./validators/follow.js');
 
 router.route('/search/').post(
     validate(search.validate), searchController.postSearch);
@@ -30,11 +32,14 @@ router.route('/search/').post(
 router.route('/profile/').get(
     validate(profile.validate), profileController.getUser);
 
+router.route('/profile/').post(
+    validate(profile.validate), profileController.postUser);
+
 router.route('/profile/id/').get(
     validate(users.validate), profileByIdController.getUser);
 
-router.route('/profile/').post(
-    validate(profile.validate), profileController.postUser);
+router.route('/profile/follow').post(
+    validate(follow.validate), followController.newUser);
 
 router.route('/profile/upload-pfp/').post(
     validate(profile.validate), upload.single('image'), pfpController.postNewPfp);

@@ -19,6 +19,10 @@ async function getUser(req, res) {
         dob: userProfile.dob,
         gender: userProfile.gender,
       });
+    } else {
+      res.status(200).json({
+        name: 'Not Found',
+      });
     }
   } catch (err) {
     console.log(err);
