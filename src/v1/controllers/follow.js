@@ -18,9 +18,8 @@ async function newUser(req, res, next) {
           {$push: {following: req.body.username,
           }},
           {upsert: true});
-      await registrationModel.findOneAndUpdate({username: req.body.username},
-          {$push: {
-            followers: userObj.username}},
+      await registrationModel.findOneAndUpdate({email: followUser.email},
+          {$push: {followers: userObj.username}},
           {upsert: true});
       res.status(200).json({data: true});
     }

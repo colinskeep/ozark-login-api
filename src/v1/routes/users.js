@@ -38,7 +38,7 @@ router.route('/profile/').post(
 router.route('/profile/id/').get(
     validate(users.validate), profileByIdController.getUser);
 
-router.route('/profile/follow').post(
+router.route('/profile/follow/').post(
     validate(follow.validate), followController.newUser);
 
 router.route('/profile/upload-pfp/').post(
