@@ -20,7 +20,19 @@ async function newUser(req, res, next) {
       await registrationModel.findOneAndUpdate({email: followUser.email},
           {$push: {followers: userProfile.username}, $set: {followersCount: followUser.followers.length}},
           {upsert: true});
-      res.status(200).json({data: true});
+      res.status(200).json({
+        id: userProfile.id,
+        name: userProfile.name,
+        email: userProfile.email,
+        username: userProfile.username,
+        website: userProfile.website,
+        location: userProfile.location,
+        bio: userProfile.bio,
+        dob: userProfile.dob,
+        gender: userProfile.gender,
+        followers: userProfile.followersCount + 1,
+        following: userProfile.followingCount,
+      });
     }
     res.status(200).json({data: false});
   } catch (err) {
