@@ -22,7 +22,7 @@ const notifications = require('./validators/notifications.js');
 const password = require('./validators/password.js');
 const feedback = require('./validators/feedback.js');
 const available = require('./validators/available.js');
-const users = require('./validators/users.js');
+const users = require('./validators/user.js');
 
 router.route('/search/').post(
     validate(search.validate), searchController.postSearch);
