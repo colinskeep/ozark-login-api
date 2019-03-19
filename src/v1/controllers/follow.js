@@ -11,11 +11,14 @@ async function newUser(req, res, next) {
   try {
     const token = req.headers.authorization.split(' ')[1];
     const userObj = await jwt.resolve(token);
+    console.log('userObj: ', userObj);
     const userProfile = await registrationModel.findOne({email: userObj.email});
+    console.log('userProfile: ', userProfile);
     const followUser = await registrationModel.findOne({username: req.body.username});
-    if (userObj && userProfile.password === userObj.password && followUser) {
-      await registrationModel.findOneAndUpdate({email: userObj.email},
-          {$push: {following: req.body.username}, $set: {followingCount: userProfile.following.length + 1}},
+    console.log('followUser: ', followUser);
+    if (userObj && userProfile && userProfile.password === userObj.password && followUser) {
+      await registrationModel.findOneAndUpdate({email: userProfile.email},
+          {$push: {following: followUser.username}, $set: {followingCount: userProfile.following.length + 1}},
           {upsert: true});
       await registrationModel.findOneAndUpdate({email: followUser.email},
           {$push: {followers: userProfile.username}, $set: {followersCount: followUser.followers.length}},
