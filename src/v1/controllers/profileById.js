@@ -7,7 +7,7 @@ const registrationModel = require('../models/registration.js');
  */
 async function getUser(req, res) {
   try {
-    const userProfile = await registrationModel.findOne({username: req.query.id});
+    const userProfile = await registrationModel.findOne({username: req.query.username});
     if (userProfile) {
       res.status(200).json({
         name: userProfile.name,
