@@ -21,17 +21,17 @@ async function newUser(req, res, next) {
           {$push: {followers: userProfile.username}, $set: {followersCount: followUser.followers.length}},
           {upsert: true});
       res.status(200).json({
-        id: userProfile.id,
-        name: userProfile.name,
-        email: userProfile.email,
-        username: userProfile.username,
-        website: userProfile.website,
-        location: userProfile.location,
-        bio: userProfile.bio,
-        dob: userProfile.dob,
-        gender: userProfile.gender,
-        followers: userProfile.followersCount + 1,
-        following: userProfile.followingCount,
+        id: followUser.id,
+        name: followUser.name,
+        email: followUser.email,
+        username: followUser.username,
+        website: followUser.website,
+        location: followUser.location,
+        bio: followUser.bio,
+        dob: followUser.dob,
+        gender: followUser.gender,
+        followers: followUser.followersCount + 1,
+        following: followUser.followingCount,
       });
     }
     res.status(200).json({data: false});
