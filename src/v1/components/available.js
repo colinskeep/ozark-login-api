@@ -11,7 +11,6 @@ async function userName(term) {
     const userNames = await registrationModel.findOne(
         {username: term}, {username: 1}
     );
-    console.log('findOne query: ', userNames);
     const restrictedWords = await restrictedWordsModel.findOne(
         {'restricted_word': term}, {username: 1}
     );
