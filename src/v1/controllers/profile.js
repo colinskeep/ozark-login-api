@@ -25,7 +25,7 @@ async function getUser(req, res, next) {
       });
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 }
 
@@ -54,7 +54,7 @@ async function postUser(req, res, next) {
       res.status(200).json({data: true});
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 }
 

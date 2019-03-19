@@ -28,7 +28,6 @@ async function getToken(req, res) {
         jsonStr.oauth_nonse = Math.floor(Math.random()*90000000) + 10000000;
         jsonStr.oauth_timestamp = (new Date).getTime();
         jsonStr.oauth_consumer_key = process.env.TWITTER_CONSUMER_KEY;
-        console.log(userProfile.email);
         await registrationModel.findOneAndUpdate({email: userProfile.email},
             {$set: {
               twitter: {
@@ -37,7 +36,6 @@ async function getToken(req, res) {
               },
             }},
             {upsert: true});
-        console.log('****************', jsonStr);
         res.send(jsonStr);
       });
     }
@@ -53,8 +51,6 @@ async function getToken(req, res) {
  */
 async function getApiKeys(req, res) {
   try {
-    console.log(req.query.oauth_token);
-    console.log(req.query.oauth_verifier);
     request.post({
       url: 'https://api.twitter.com/oauth/access_token?oauth_verifier',
       oauth: {
@@ -64,10 +60,8 @@ async function getApiKeys(req, res) {
       },
       form: {oauth_verifier: req.query.oauth_verifier},
     }, async function(err, e, body) {
-      var jsonStr = JSON.parse('{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
-      console.log('____________________________', req.query.oauth_token, jsonStr);
+      const jsonStr = JSON.parse('{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
       const data = await registrationModel.findOne({'twitter.oauth_token': req.query.oauth_token});
-      console.log(data);
       await registrationModel.findOneAndUpdate({email: data.email},
           {$set: {
             twitter: {
