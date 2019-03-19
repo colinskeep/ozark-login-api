@@ -19,8 +19,8 @@ async function getUser(req, res) {
         bio: userProfile.bio,
         dob: userProfile.dob,
         gender: userProfile.gender,
-        followers: userProfile.followers,
-        following: userProfile.following,
+        followers: userProfile.followersCount,
+        following: userProfile.followingCount,
       });
     } else {
       res.status(200).json({
