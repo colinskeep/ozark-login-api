@@ -14,6 +14,7 @@ async function newUser(req, res, next) {
     console.log('userObj: ', userObj);
     const userProfile = await registrationModel.findOne({email: userObj.email});
     console.log('userProfile: ', userProfile);
+    console.log(req.body);
     console.log('req.body.username: ', req.body.username);
     const followUser = await registrationModel.findOne({username: req.body.username});
     console.log('followUser: ', followUser);
