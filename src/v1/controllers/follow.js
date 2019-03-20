@@ -36,6 +36,7 @@ async function newUser(req, res, next) {
     }
     res.status(200).json({data: false});
   } catch (err) {
+    res.status(200).json({followingUser: true});
     console.log(err);
   }
 }
