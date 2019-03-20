@@ -15,7 +15,7 @@ async function userName(term) {
     );
     for (let i = 0; i <= userEmails.length; i++) {
       if (userEmails.length > 0 && userNames.map(function(e) {
-        return e.id;
+        return e.username;
       }).indexOf(userEmails[i].username) === -1) {
         arr.push(userEmails[i]);
         if (i == userEmails.length - 1) {
