@@ -8,12 +8,11 @@ const registrationModel = require('../models/registration.js');
  * @param {string} next - move on
  */
 async function newUser(req, res, next) {
-  const followUser = null;
+  const token = req.headers.authorization.split(' ')[1];
+  const userObj = await jwt.resolve(token);
+  const userProfile = await registrationModel.findOne({email: userObj.email});
+  const followUser = await registrationModel.findOne({username: req.body.username});
   try {
-    const token = req.headers.authorization.split(' ')[1];
-    const userObj = await jwt.resolve(token);
-    const userProfile = await registrationModel.findOne({email: userObj.email});
-    const followUser = await registrationModel.findOne({username: req.body.username});
     if (userObj && userProfile && userProfile.password === userObj.password && followUser) {
       await registrationModel.findOneAndUpdate({email: userProfile.email, following: {$ne: followUser.username}},
           {$push: {following: followUser.username}, $set: {followingCount: userProfile.following.length + 1}},
