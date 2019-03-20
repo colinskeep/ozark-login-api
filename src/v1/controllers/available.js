@@ -14,14 +14,12 @@ async function postAvailable(req, res) {
       const token = req.headers.authorization.split(' ')[1];
       const userObj = await jwt.resolve(token);
       const userProfile = await registrationModel.findOne({email: userObj.email});
-      console.log(userProfile, req.body.username);
       if (userProfile.username == req.body.username) {
         res.status(200).json({nameAvailable: true, allowedWords: true});
       }
     }
     const searchResults = await available.userName(req.body.username);
     if (searchResults && restrictedPath.indexOf(req.body.username.toLowerCase()) < 0 && /[^\w\s-]/ig.test(req.body.username) === false) {
-      console.log(searchResults);
       res.status(200).json(searchResults);
     } else {
       res.status(200).json({nameAvailable: false, allowedWords: false});
