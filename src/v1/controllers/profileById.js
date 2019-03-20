@@ -18,8 +18,8 @@ async function getUser(req, res) {
       myProfile = await registrationModel.findOne({email: userObj.email});
     }
     const isMine = (myProfile !== '' && typeof userProfile !== 'undefined' && userProfile.username == myProfile.username) ? true : false;
-    const imFollowing = (myProfile !== '' && typeof userProfile !== 'undefined' && myProfile.following.indexOf(userProfile.username)) ? true : false;
-    const followingMe = (myProfile !== '' && typeof userProfile !== 'undefined' && myProfile.followers.indexOf(userProfile.username)) ? true : false;
+    const imFollowing = (myProfile !== '' && typeof userProfile !== 'undefined' && myProfile.following.indexOf(userProfile.username) > - 1) ? true : false;
+    const followingMe = (myProfile !== '' && typeof userProfile !== 'undefined' && myProfile.followers.indexOf(userProfile.username) > - 1) ? true : false;
     if (userProfile) {
       res.status(200).json({
         id: userProfile.id,
