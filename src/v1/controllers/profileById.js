@@ -18,6 +18,8 @@ async function getUser(req, res) {
       myProfile = await registrationModel.findOne({email: userObj.email});
     }
     const isMine = (myProfile !== '' && typeof userProfile !== 'undefined' && userProfile.username == myProfile.username) ? true : false;
+    const imFollowing = (myProfile !== '' && typeof userProfile !== 'undefined' && myProfile.following.indexOf(userProfile.username)) ? true : false;
+    const followingMe = (myProfile !== '' && typeof userProfile !== 'undefined' && myProfile.followers.indexOf(userProfile.username)) ? true : false;
     if (userProfile) {
       res.status(200).json({
         id: userProfile.id,
@@ -32,6 +34,8 @@ async function getUser(req, res) {
         followers: userProfile.followersCount,
         following: userProfile.followingCount,
         isMine,
+        imFollowing,
+        followingMe,
       });
     } else {
       res.status(200).json({
