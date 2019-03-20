@@ -8,8 +8,10 @@ const jwt = require('../components/jwt.js');
  */
 async function getUser(req, res) {
   try {
+    console.log(req.headers.authorization);
     const userProfile = await registrationModel.findOne({username: req.query.username});
     if (typeof req.headers.authorization !== 'undefined') {
+      console.log('jwt found');
       const token = req.headers.authorization.split(' ')[1];
       const userObj = await jwt.resolve(token);
       const myProfile = await registrationModel.findOne({email: userObj.email});
