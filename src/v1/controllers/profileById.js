@@ -10,16 +10,17 @@ async function getUser(req, res) {
   try {
     console.log(req.headers.authorization);
     const userProfile = await registrationModel.findOne({username: req.query.username});
+    let myProfile = '';
     if (typeof req.headers.authorization !== 'undefined') {
       console.log('jwt found');
       const token = req.headers.authorization.split(' ')[1];
       const userObj = await jwt.resolve(token);
-      const myProfile = await registrationModel.findOne({email: userObj.email});
+      myProfile = await registrationModel.findOne({email: userObj.email});
     }
     console.log(typeof myProfile, 'type of myprofile');
     console.log(typeof userProfile, 'type of userprofile');
     console.log(typeof myProfile !== 'undefined' && typeof userProfile !== 'undefined' && userProfile.username == myProfile.username, 'bool of ternary');
-    const isMine = (typeof myProfile !== 'undefined' && typeof userProfile !== 'undefined' && userProfile.username == myProfile.username) ? true : false;
+    const isMine = (myProfile !== '' && typeof userProfile !== 'undefined' && userProfile.username == myProfile.username) ? true : false;
     console.log(isMine);
     if (userProfile) {
       res.status(200).json({
