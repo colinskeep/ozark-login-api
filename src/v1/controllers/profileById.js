@@ -11,6 +11,7 @@ async function getUser(req, res) {
     console.log(req.headers.authorization);
     const userProfile = await registrationModel.findOne({username: req.query.username});
     let myProfile = '';
+    console.log(req.headers.authorization)
     if (typeof req.headers.authorization !== 'undefined') {
       console.log('jwt found');
       const token = req.headers.authorization.split(' ')[1];
