@@ -8,6 +8,7 @@ const registrationModel = require('../models/registration.js');
  * @param {string} next - move on
  */
 async function newUser(req, res, next) {
+  const followUser = null;
   try {
     const token = req.headers.authorization.split(' ')[1];
     const userObj = await jwt.resolve(token);
@@ -36,7 +37,19 @@ async function newUser(req, res, next) {
     }
     res.status(200).json({data: false});
   } catch (err) {
-    res.status(200).json({followingUser: true});
+    res.status(200).json({
+      id: followUser.id,
+      name: followUser.name,
+      email: followUser.email,
+      username: followUser.username,
+      website: followUser.website,
+      location: followUser.location,
+      bio: followUser.bio,
+      dob: followUser.dob,
+      gender: followUser.gender,
+      followers: followUser.followersCount,
+      following: followUser.followingCount,
+    });
     console.log(err);
   }
 }
