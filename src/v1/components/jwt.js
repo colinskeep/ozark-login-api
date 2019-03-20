@@ -2,7 +2,6 @@
 const jwt = require('jsonwebtoken');
 
 const signOptions = {
-  expiresIn: '12h',
   algorithm: 'RS256',
 };
 

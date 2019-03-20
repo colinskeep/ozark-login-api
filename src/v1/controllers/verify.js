@@ -14,7 +14,7 @@ async function postValidate(req, res, next) {
     const token = req.headers.authorization.split(' ')[1];
     const code = req.body.code;
     const userObj = await jwt.resolve(token);
-    const emailPrefix = await userObj.email.split('@')[0];
+    const emailPrefix = await userObj.email.split('@')[0].replace(/[^\w\s-]/ig, '');
     const username = await ungen.get(emailPrefix);
     const verifyCode = await verify.log(userObj.email, username, code);
     const firstLetter = (userObj.name.match(/[a-zA-Z]/) == null) ?

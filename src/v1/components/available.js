@@ -7,12 +7,12 @@ const restrictedWordsModel = require('../models/restricted.js');
 */
 async function userName(term) {
   try {
-    console.log('available.js term: ', term);
+    const sanitized = term.replace(/[^\w\s-]/ig, '');
     const userNames = await registrationModel.findOne(
-        {username: term}, {username: 1}
+        {username: sanitized}, {username: 1}
     );
     const restrictedWords = await restrictedWordsModel.findOne(
-        {'restricted_word': term}, {username: 1}
+        {'restricted_word': sanitized}, {username: 1}
     );
     const nameAvailable = (userNames == null) ? true : false;
     const allowedWords = (restrictedWords == null) ? true: false;

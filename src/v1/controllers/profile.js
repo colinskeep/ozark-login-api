@@ -41,9 +41,10 @@ async function postUser(req, res, next) {
     const userObj = await jwt.resolve(token);
     const userProfile = await registrationModel.findOne({email: userObj.email});
     if (userObj && userProfile.password === userObj.password) {
+      const username = req.body.username.replace(/[^\w\s-]/ig, '');
       await registrationModel.findOneAndUpdate({email: userObj.email},
           {$set: {name: req.body.name,
-            username: req.body.username,
+            username,
             website: req.body.website,
             location: req.body.location,
             bio: req.body.bio,

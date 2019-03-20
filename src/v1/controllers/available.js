@@ -20,7 +20,7 @@ async function postAvailable(req, res) {
       }
     }
     const searchResults = await available.userName(req.body.username);
-    if (searchResults && restrictedPath.indexOf(req.body.username.toLowerCase()) < 0) {
+    if (searchResults && restrictedPath.indexOf(req.body.username.toLowerCase()) < 0 && /[^\w\s-]/ig.test(req.body.username) === false) {
       console.log(searchResults);
       res.status(200).json(searchResults);
     } else {
