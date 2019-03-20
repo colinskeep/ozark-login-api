@@ -39,14 +39,4 @@ const registrationSchema = new mongoose.Schema({
   followersCount: {type: Number, default: 0},
 });
 
-// registrationSchema.pre('findOneAndUpdate', function() {
-//   const milliseconds = (new Date).getTime();
-//   console.log(this._conditions.email);
-//   this.update(
-//       {email: this._conditions.email},
-//       {$set: {lastSeen: milliseconds}},
-//       {upsert: true},
-//   );
-// });
-
 module.exports = mongoose.model('registration', registrationSchema);
