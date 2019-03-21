@@ -31,8 +31,8 @@ async function newUser(req, res, next) {
         bio: follow.bio,
         dob: follow.dob,
         gender: follow.gender,
-        followers: follow.followersCount,
-        following: follow.followingCount,
+        followers: follow.followers.length,
+        following: follow.following.length,
       });
     }
     res.status(200).json({data: false});
@@ -47,8 +47,8 @@ async function newUser(req, res, next) {
       bio: followUser.bio,
       dob: followUser.dob,
       gender: followUser.gender,
-      followers: followUser.followersCount,
-      following: followUser.followingCount,
+      followers: followUser.followers.length,
+      following: followUser.following.length,
     });
     console.log(err);
   }
