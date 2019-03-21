@@ -1,5 +1,6 @@
 const jwt = require('../components/jwt.js');
 const registrationModel = require('../models/registration.js');
+const milliseconds = (new Date).getTime();
 
 /**
  * Function to execute when endpoint reached
@@ -15,10 +16,10 @@ async function newUser(req, res, next) {
   try {
     if (userObj && userProfile && userProfile.password === userObj.password && followUser) {
       await registrationModel.findOneAndUpdate({email: userProfile.email, following: {$ne: followUser.username}},
-          {$push: {following: followUser.username}, $set: {followingCount: userProfile.following.length + 1}},
+          {$push: {following: {username: followUser.username, since: milliseconds}}, $set: {followingCount: userProfile.following.length + 1}},
           {upsert: true});
       await registrationModel.findOneAndUpdate({email: followUser.email, followers: {$ne: userProfile.username}},
-          {$push: {followers: userProfile.username}, $set: {followersCount: followUser.followers.length + 1}},
+          {$push: {followers: {username: userProfile.username, since: milliseconds}}, $set: {followersCount: followUser.followers.length + 1}},
           {upsert: true});
       res.status(200).json({
         id: followUser.id,
