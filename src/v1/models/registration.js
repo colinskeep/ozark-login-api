@@ -33,8 +33,8 @@ const registrationSchema = new mongoose.Schema({
     loggedIn: Boolean,
   },
   lastSeen: {type: String},
-  following: [{username: String, since: String}],
-  followers: [{username: String, since: String}],
+  following: [{username: {type: String, unique: true}, since: String}],
+  followers: [{username: {type: String, unique: true}, since: String}],
   followingCount: {type: Number, default: 0},
   followersCount: {type: Number, default: 0},
 });
