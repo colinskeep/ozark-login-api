@@ -35,8 +35,6 @@ const registrationSchema = new mongoose.Schema({
   lastSeen: {type: String},
   following: [{username: {type: String, unique: true}, since: String}],
   followers: [{username: {type: String, unique: true}, since: String}],
-  followingCount: {type: Number, default: 0},
-  followersCount: {type: Number, default: 0},
 });
 
 module.exports = mongoose.model('registration', registrationSchema);
