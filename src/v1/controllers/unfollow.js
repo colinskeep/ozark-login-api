@@ -19,7 +19,7 @@ async function newUser(req, res, next) {
           {upsert: true});
       const unfollow = await registrationModel.findOneAndUpdate({email: unfollowUser.email},
           {$pull: {followers: {username: userProfile.username}}},
-          {upsert: true});
+          {upsert: true, new: true});
       res.status(200).json({
         id: unfollow.id,
         name: unfollow.name,
