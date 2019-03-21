@@ -30,7 +30,7 @@ async function newUser(req, res, next) {
         bio: unfollowUser.bio,
         dob: unfollowUser.dob,
         gender: unfollowUser.gender,
-        followers: unfollowUser.followersCount + 1,
+        followers: unfollowUser.followersCount - 1,
         following: unfollowUser.followingCount,
       });
     }
