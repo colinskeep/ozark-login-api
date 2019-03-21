@@ -30,8 +30,8 @@ async function newUser(req, res, next) {
         bio: unfollowUser.bio,
         dob: unfollowUser.dob,
         gender: unfollowUser.gender,
-        followers: unfollowUser.followersCount - 1,
-        following: unfollowUser.followingCount,
+        followers: unfollowUser.followers.length - 1,
+        following: unfollowUser.following.length,
       });
     }
     res.status(200).json({data: false});
