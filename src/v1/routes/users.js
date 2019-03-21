@@ -11,6 +11,7 @@ const pfbController = require('../controllers/pfb-upload.js');
 const availableController = require('../controllers/available.js');
 const profileByIdController = require('../controllers/profileById.js');
 const followController = require('../controllers/follow.js');
+const unfollowController = require('../controllers/unfollow.js');
 
 const router = new express.Router();
 const multer = require('multer');
@@ -40,6 +41,9 @@ router.route('/profile/id/').get(
 
 router.route('/profile/follow/').post(
     validate(follow.validate), followController.newUser);
+
+router.route('/profile/unfollow/').post(
+    validate(follow.validate), unfollowController.newUser);
 
 router.route('/profile/upload-pfp/').post(
     validate(profile.validate), upload.single('image'), pfpController.postNewPfp);
