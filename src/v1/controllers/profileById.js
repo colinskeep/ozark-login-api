@@ -21,12 +21,17 @@ async function getUser(req, res) {
       && myProfile.following.map(function(e) {
         return e.username;
       }).indexOf(userProfile.username) > - 1) ? true : false;
-    console.log('im following: ', imFollowing);
     const followingMe = (myProfile !== '' && typeof userProfile !== 'undefined'
       && myProfile.followers.map(function(f) {
         return f.username;
       }).indexOf(userProfile.username) > - 1) ? true : false;
-    console.log('is following me: ', followingMe);
+    console.log(myProfile.following.map(function(e) {
+      return e.username;
+    }).indexOf(userProfile.username));
+    const theIndex = myProfile.following.map(function(e) {
+      return e.username;
+    }).indexOf(userProfile.username);
+    console.log(userProfile.following[theIndex].since);
     if (userProfile) {
       res.status(200).json({
         id: userProfile.id,
