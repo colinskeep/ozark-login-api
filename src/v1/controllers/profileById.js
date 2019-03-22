@@ -8,9 +8,10 @@ const jwt = require('../components/jwt.js');
  */
 async function getUser(req, res) {
   try {
-    console.log(req.headers.authorization);
     const userProfile = await registrationModel.findOne({username: req.query.username});
     let myProfile = '';
+    let followingSince = '';
+    let followerSince = '';
     if (typeof req.headers.authorization !== 'undefined' && req.headers.authorization.split(' ')[1] !== 'null') {
       const token = req.headers.authorization.split(' ')[1];
       const userObj = await jwt.resolve(token);
@@ -27,8 +28,16 @@ async function getUser(req, res) {
       && usersImFollowing.indexOf(userProfile.username) > - 1) ? true : false;
     const followingMe = (myProfile !== '' && typeof userProfile !== 'undefined'
       && usersFollowingMe.indexOf(userProfile.username) > - 1) ? true : false;
-    const theIndex = usersImFollowing.indexOf(userProfile.username);
-    console.log(myProfile.following[theIndex].since);
+    const followingIndex = usersImFollowing.indexOf(userProfile.username);
+    const followerIndex = usersFollowingMe.indexOf(userProfile.username);
+    if (imFollowing) {
+      console.log(myProfile.following[followingIndex].since);
+      followingSince = myProfile.following[followerIndex].since;
+    }
+    if (followingMe) {
+      console.log(followerSince);
+      followerSince = myProfile.followers;
+    }
     if (userProfile) {
       res.status(200).json({
         id: userProfile.id,
@@ -45,6 +54,8 @@ async function getUser(req, res) {
         isMine,
         imFollowing,
         followingMe,
+        followerSince,
+        followingSince,
       });
     } else {
       res.status(200).json({
