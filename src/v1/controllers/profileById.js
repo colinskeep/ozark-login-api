@@ -12,14 +12,21 @@ async function getUser(req, res) {
     const userProfile = await registrationModel.findOne({username: req.query.username});
     let myProfile = '';
     if (typeof req.headers.authorization !== 'undefined' && req.headers.authorization.split(' ')[1] !== 'null') {
-      console.log('jwt found');
       const token = req.headers.authorization.split(' ')[1];
       const userObj = await jwt.resolve(token);
       myProfile = await registrationModel.findOne({email: userObj.email});
     }
     const isMine = (myProfile !== '' && typeof userProfile !== 'undefined' && userProfile.username == myProfile.username) ? true : false;
-    const imFollowing = (myProfile !== '' && typeof userProfile !== 'undefined' && myProfile.following.indexOf(userProfile.username) > - 1) ? true : false;
-    const followingMe = (myProfile !== '' && typeof userProfile !== 'undefined' && myProfile.followers.indexOf(userProfile.username) > - 1) ? true : false;
+    const imFollowing = (myProfile !== '' && typeof userProfile !== 'undefined'
+      && myProfile.following.map(function(e) {
+        return e.username;
+      }).indexOf(userProfile.username) > - 1) ? true : false;
+    console.log('im following: ', imFollowing);
+    const followingMe = (myProfile !== '' && typeof userProfile !== 'undefined'
+      && myProfile.followers.map(function(f) {
+        return f.username;
+      }).indexOf(userProfile.username) > - 1) ? true : false;
+    console.log('is following me: ', followingMe);
     if (userProfile) {
       res.status(200).json({
         id: userProfile.id,
