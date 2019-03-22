@@ -8,12 +8,14 @@ const registrationModel = require('../models/registration.js');
 async function log(email, username, verificationCode) {
   console.log(username);
   try {
+    const milliseconds = (new Date).getTime();
     const emailExists = await registrationModel.findOne({email: email});
     if (emailExists.verificationCode == verificationCode) {
       await registrationModel.findOneAndUpdate({email},
           {$set: {
             verifiedEmail: true,
             username: username,
+            memberSince: milliseconds,
             emailNotifications: {
               message: true,
               follow: true,
