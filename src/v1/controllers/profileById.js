@@ -35,8 +35,8 @@ async function getUser(req, res) {
       followingSince = myProfile.following[followingIndex].since;
     }
     if (followingMe) {
-      console.log(myProfile.follower[followerIndex].since);
-      followerSince = myProfile.follower[followerIndex].since;
+      console.log(myProfile.followers[followerIndex].since);
+      followerSince = myProfile.followers[followerIndex].since;
     }
     if (userProfile) {
       res.status(200).json({
