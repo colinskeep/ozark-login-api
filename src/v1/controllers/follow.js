@@ -33,6 +33,7 @@ async function newUser(req, res, next) {
         gender: follow.gender,
         followers: follow.followers.length,
         following: follow.following.length,
+        imFollowing: true,
       });
     }
     res.status(200).json({data: false});
