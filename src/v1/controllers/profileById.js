@@ -17,21 +17,18 @@ async function getUser(req, res) {
       myProfile = await registrationModel.findOne({email: userObj.email});
     }
     const isMine = (myProfile !== '' && typeof userProfile !== 'undefined' && userProfile.username == myProfile.username) ? true : false;
+    const usersImFollowing = myProfile.following.map(function(e) {
+      return e.username;
+    });
+    const usersFollowingMe = myProfile.followers.map(function(f) {
+      return f.username;
+    });
     const imFollowing = (myProfile !== '' && typeof userProfile !== 'undefined'
-      && myProfile.following.map(function(e) {
-        return e.username;
-      }).indexOf(userProfile.username) > - 1) ? true : false;
+      && usersImFollowing.indexOf(userProfile.username) > - 1) ? true : false;
     const followingMe = (myProfile !== '' && typeof userProfile !== 'undefined'
-      && myProfile.followers.map(function(f) {
-        return f.username;
-      }).indexOf(userProfile.username) > - 1) ? true : false;
-    console.log(myProfile.following.map(function(e) {
-      return e.username;
-    }).indexOf(userProfile.username));
-    const theIndex = myProfile.following.map(function(e) {
-      return e.username;
-    }).indexOf(userProfile.username);
-    console.log(userProfile.following[theIndex].since);
+      && usersFollowingMe.indexOf(userProfile.username) > - 1) ? true : false;
+    const theIndex = usersImFollowing.indexOf(userProfile.username);
+    console.log(myProfile.following[theIndex].since);
     if (userProfile) {
       res.status(200).json({
         id: userProfile.id,
