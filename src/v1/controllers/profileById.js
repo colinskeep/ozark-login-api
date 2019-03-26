@@ -74,6 +74,7 @@ async function getUser(req, res) {
  */
 async function getFollowers(req, res) {
   const data = await registrationModel.findOne({username: req.query.username});
+  console.log(data);
   res.status(200).json({
     followers: data.followers,
   });
@@ -86,6 +87,7 @@ async function getFollowers(req, res) {
  */
 async function getFollowing(req, res) {
   const data = await registrationModel.findOne({username: req.query.username});
+  console.log(data);
   res.status(200).json({
     following: data.following,
   });
