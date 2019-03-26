@@ -67,6 +67,32 @@ async function getUser(req, res) {
   }
 }
 
+/**
+ * Function to execute when endpoint reached
+ * @param {string} req - incoming request
+ * @param {string} res - outgoing response
+ */
+async function getFollowers(req, res) {
+  const data = await registrationModel.findOne({username: req.query.username});
+  res.status(200).json({
+    followers: data.followers,
+  });
+}
+
+/**
+ * Function to execute when endpoint reached
+ * @param {string} req - incoming request
+ * @param {string} res - outgoing response
+ */
+async function getFollowing(req, res) {
+  const data = await registrationModel.findOne({username: req.query.username});
+  res.status(200).json({
+    following: data.following,
+  });
+}
+
 module.exports = {
   getUser,
+  getFollowers,
+  getFollowing,
 };

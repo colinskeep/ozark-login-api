@@ -39,6 +39,12 @@ router.route('/profile/').post(
 router.route('/profile/id/').get(
     validate(users.validate), profileByIdController.getUser);
 
+router.route('/profile/id/following/').get(
+    validate(users.validate), profileByIdController.getFollowing);
+
+router.route('/profile/id/followers/').get(
+    validate(users.validate), profileByIdController.getFollowers);
+
 router.route('/profile/follow/').post(
     validate(follow.validate), followController.newUser);
 

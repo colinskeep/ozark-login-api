@@ -16,10 +16,10 @@ async function newUser(req, res, next) {
   try {
     if (userObj && userProfile && userProfile.password === userObj.password && followUser) {
       await registrationModel.findOneAndUpdate({'email': userProfile.email, 'following.username': {$ne: followUser.username}},
-          {$push: {following: {'username': followUser.username, 'since': milliseconds}}},
+          {$push: {following: {'username': followUser.username, 'since': milliseconds, 'userid': followUser.id, 'name': followUser.name}}},
           {upsert: true});
       const follow = await registrationModel.findOneAndUpdate({'email': followUser.email, 'followers.username': {$ne: userProfile.username}},
-          {$push: {followers: {'username': userProfile.username, 'since': milliseconds}}},
+          {$push: {followers: {'username': userProfile.username, 'since': milliseconds, 'userid': userProfile.id, 'name': userProfile.name}}},
           {upsert: true, new: true});
       res.status(200).json({
         id: follow.id,
