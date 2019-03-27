@@ -33,7 +33,7 @@ async function postNewPfp(req, res) {
             height: 200,
           })
           .toBuffer(async function(err, data) {
-            const resized = await sharp(data).resize(20, 20).toBuffer();
+            const resized = await sharp(data).resize(20, 20).toBuffer().toString('base64');
             console.log(resized);
             await registrationModel.findOneAndUpdate({email: userObj.email}, {$set: {thumbnail: resized}}, {upsert: true});
             await s3.putObject({
