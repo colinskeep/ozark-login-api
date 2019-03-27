@@ -13,9 +13,9 @@ const s3 = new aws.S3();
  * @param {string} backgroundFile - outgoing response
  * @param {string} firstLetter - move on
  */
-function gen(id, backgroundFile, firstLetter) {
+async function gen(id, backgroundFile, firstLetter) {
   const image = sharp('images/background.jpg');
-  image
+  await image
       .metadata()
       .then(function(metadata) {
         const leftMargin = Math.floor(Math.random() * (metadata.width - 200));
