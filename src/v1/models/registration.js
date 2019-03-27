@@ -18,6 +18,7 @@ const registrationSchema = new mongoose.Schema({
   currency: {type: String},
   visibility: {type: String},
   messages: {type: String},
+  thumbnail: {type: String},
   emailNotifications: {
     message: Boolean,
     follow: Boolean,

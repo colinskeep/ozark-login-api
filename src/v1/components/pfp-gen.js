@@ -1,5 +1,6 @@
 const sharp = require('sharp');
 const aws = require('aws-sdk');
+const registrationModel = require('../models/registration.js')
 
 aws.config.update({
   secretAccessKey: process.env.AWS_SECRET,
@@ -16,7 +17,7 @@ const s3 = new aws.S3();
 async function gen(id, backgroundFile, firstLetter) {
   try {
     const image = sharp('images/background.jpg');
-    await image
+    image
         .metadata()
         .then(function(metadata) {
           const leftMargin = Math.floor(Math.random() * (metadata.width - 200));
@@ -26,6 +27,8 @@ async function gen(id, backgroundFile, firstLetter) {
                 .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
                 .overlayWith(`images/letters/${firstLetter}.png`)
                 .toBuffer(function(err, data) {
+                  const resized = data.resize(20, 20).toBuffer();
+                  registrationModel.findOneAndUpdate({id: id}, {$set: {thumbnail: resized}}, {upsert: true});
                   s3.putObject({
                     Key: `${id}/pfp_200x200.jpg`,
                     Bucket: process.env.AWS_BUCKET,
@@ -39,6 +42,8 @@ async function gen(id, backgroundFile, firstLetter) {
             return image
                 .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
                 .toBuffer(function(err, data) {
+                  const resized = data.resize(20, 20).toBuffer();
+                  registrationModel.findOneAndUpdate({id: id}, {$set: {thumbnail: resized}}, {upsert: true});
                   s3.putObject({
                     Key: `${id}/pfp_200x200.jpg`,
                     Bucket: process.env.AWS_BUCKET,
