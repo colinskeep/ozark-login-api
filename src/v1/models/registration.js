@@ -35,8 +35,8 @@ const registrationSchema = new mongoose.Schema({
     loggedIn: Boolean,
   },
   lastSeen: {type: String},
-  following: [{username: {type: String, unique: true}, since: String, name: String, userid: String}],
-  followers: [{username: {type: String, unique: true}, since: String, name: String, userid: String}],
+  following: [{username: {type: String}, since: String, name: String, userid: String}],
+  followers: [{username: {type: String}, since: String, name: String, userid: String}],
 });
 
 module.exports = mongoose.model('registration', registrationSchema);
