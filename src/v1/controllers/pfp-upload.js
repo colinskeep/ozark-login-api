@@ -34,8 +34,9 @@ async function postNewPfp(req, res) {
           })
           .toBuffer(async function(err, data) {
             const resized = await sharp(data).resize(20, 20).toBuffer();
-            registrationModel.findOneAndUpdate({email: userObj.email}, {$set: {thumbnail: resized}}, {upsert: true});
-            s3.putObject({
+            console.log(resized);
+            await registrationModel.findOneAndUpdate({email: userObj.email}, {$set: {thumbnail: resized}}, {upsert: true});
+            await s3.putObject({
               Key: `${userProfile.id}/pfp_200x200.jpg`,
               Bucket: process.env.AWS_BUCKET,
               ACL: 'public-read',
