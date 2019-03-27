@@ -26,9 +26,10 @@ async function gen(id, backgroundFile, firstLetter) {
             return image
                 .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
                 .overlayWith(`images/letters/${firstLetter}.png`)
-                .toBuffer(function(err, data) {
-                  const resized = data.resize(20, 20).toBuffer();
-                  registrationModel.findOneAndUpdate({id: id}, {$set: {thumbnail: resized}}, {upsert: true});
+                .toBuffer(async function(err, data) {
+                  const resized = await sharp(data).resize(20, 20).toBuffer();
+                  const b64 = await resized.toString('base64');
+                  await registrationModel.findOneAndUpdate({id: id}, {$set: {thumbnail: b64}}, {upsert: true});
                   s3.putObject({
                     Key: `${id}/pfp_200x200.jpg`,
                     Bucket: process.env.AWS_BUCKET,
@@ -41,10 +42,11 @@ async function gen(id, backgroundFile, firstLetter) {
           } else {
             return image
                 .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
-                .toBuffer(function(err, data) {
-                  const resized = data.resize(20, 20).toBuffer();
-                  registrationModel.findOneAndUpdate({id: id}, {$set: {thumbnail: resized}}, {upsert: true});
-                  s3.putObject({
+                .toBuffer(async function(err, data) {
+                  const resized = await sharp(data).resize(20, 20).toBuffer();
+                  const b64 = await resized.toString('base64');
+                  await registrationModel.findOneAndUpdate({id: id}, {$set: {thumbnail: b64}}, {upsert: true});
+                  await s3.putObject({
                     Key: `${id}/pfp_200x200.jpg`,
                     Bucket: process.env.AWS_BUCKET,
                     ACL: 'public-read',
