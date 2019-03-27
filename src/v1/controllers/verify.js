@@ -21,12 +21,14 @@ async function postValidate(req, res, next) {
      'undefined' :
       (userObj.name.match(/[a-zA-Z]/) || []).pop().toUpperCase();
     if (verifyCode.data === true) {
-      await pfp.gen(verifyCode.id, 'images/background.jpg', firstLetter);
+      const pfpic = await pfp.gen(verifyCode.id, 'images/background.jpg', firstLetter);
+      console.log(pfpic);
       res.status(200).json({
         data: true,
         id: verifyCode.id,
         name: verifyCode.name,
         username: verifyCode.username,
+        thumbnail: pfpic.b64,
       });
     } else {
       res.status(200).json({data: false});
