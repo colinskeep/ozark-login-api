@@ -12,7 +12,6 @@ async function log(name, email, password) {
   try {
     const emailExists = await registrationModel.findOne({email: email});
     if (!emailExists) {
-      console.log("new email found - adding to db");
       const verificationCode = Math.floor(Math.random()*(999999-100000+1)+100000);
       await registrationModel.findOneAndUpdate({email},
           {$set: {name, email, password, verificationCode, verifiedEmail: false}},

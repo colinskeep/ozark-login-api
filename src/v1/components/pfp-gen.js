@@ -36,6 +36,7 @@ async function gen(id, backgroundFile, firstLetter) {
                     ACL: 'public-read',
                     Body: data,
                   }, ( err, status, b64 ) => {
+                    console.log(status);
                     console.log(b64);
                     return (b64);
                   } );
@@ -53,6 +54,7 @@ async function gen(id, backgroundFile, firstLetter) {
                     ACL: 'public-read',
                     Body: data,
                   }, ( err, status, b64 ) => {
+                    console.log(status);
                     console.log(b64);
                     return (b64);
                   } );
