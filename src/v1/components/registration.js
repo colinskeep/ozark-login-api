@@ -35,6 +35,7 @@ async function log(name, email, password) {
   } catch (err) {
     // eslint-disable-next-line no-console
     // console.log(`logger log. ${err}`);
+    console.log(err)
     return err.code;
   }
 }
