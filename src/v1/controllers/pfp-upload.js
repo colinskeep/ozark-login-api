@@ -32,8 +32,8 @@ async function postNewPfp(req, res) {
             width: 200,
             height: 200,
           })
-          .toBuffer(function(err, data) {
-            const resized = data.resize(20, 20).toBuffer();
+          .toBuffer(async function(err, data) {
+            const resized = await sharp(data).resize(20, 20).toBuffer();
             registrationModel.findOneAndUpdate({email: userObj.email}, {$set: {thumbnail: resized}}, {upsert: true});
             s3.putObject({
               Key: `${userProfile.id}/pfp_200x200.jpg`,
