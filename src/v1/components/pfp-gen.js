@@ -29,7 +29,7 @@ async function gen(id, backgroundFile, firstLetter) {
                 .toBuffer(async function(err, data) {
                   const resized = await sharp(data).resize(20, 20).toBuffer();
                   const b64 = await resized.toString('base64');
-                  await registrationModel.findOneAndUpdate({id: id}, {$set: {thumbnail: b64}}, {upsert: true});
+                  await registrationModel.findOneAndUpdate({_id: id}, {$set: {thumbnail: b64}}, {upsert: true});
                   s3.putObject({
                     Key: `${id}/pfp_200x200.jpg`,
                     Bucket: process.env.AWS_BUCKET,
@@ -46,14 +46,14 @@ async function gen(id, backgroundFile, firstLetter) {
                 .toBuffer(async function(err, data) {
                   const resized = await sharp(data).resize(20, 20).toBuffer();
                   const b64 = await resized.toString('base64');
-                  await registrationModel.findOneAndUpdate({id: id}, {$set: {thumbnail: b64}}, {upsert: true});
+                  await registrationModel.findOneAndUpdate({_id: id}, {$set: {thumbnail: b64}}, {upsert: true});
                   await s3.putObject({
                     Key: `${id}/pfp_200x200.jpg`,
                     Bucket: process.env.AWS_BUCKET,
                     ACL: 'public-read',
                     Body: data,
                   }, ( err, status, b64 ) => {
-                    console.log(b64)
+                    console.log(b64);
                     return (b64);
                   } );
                 });
