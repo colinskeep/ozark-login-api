@@ -21,6 +21,7 @@ async function postRegister(req, res, next) {
     const password = await bcrypt.hash(req.body.password, 12);
     const writeLog = await registration.log(
         name, email, password);
+    console.log(writeLog)
     if (writeLog.valid === true) {
       const token = await jwt.sign({name, email, password});
       res.status(200).json({jwt: token});

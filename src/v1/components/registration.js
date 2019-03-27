@@ -8,6 +8,7 @@ const registrationModel = require('../models/registration.js');
  * @param {bool} verifiedEmail - did they verify email
 */
 async function log(name, email, password) {
+  console.log(name, email, password)
   try {
     const emailExists = await registrationModel.findOne({email: email});
     if (!emailExists) {

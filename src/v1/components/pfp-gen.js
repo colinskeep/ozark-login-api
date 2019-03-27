@@ -1,6 +1,6 @@
 const sharp = require('sharp');
 const aws = require('aws-sdk');
-const registrationModel = require('../models/registration.js')
+const registrationModel = require('../models/registration.js');
 
 aws.config.update({
   secretAccessKey: process.env.AWS_SECRET,
