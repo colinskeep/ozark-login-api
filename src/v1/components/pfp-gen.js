@@ -37,9 +37,9 @@ async function gen(id, backgroundFile, firstLetter) {
                     Body: data,
                   }, ( err, status, b64 ) => {
                     console.log(status);
-                    console.log(b64);
-                    return (b64);
-                  } );
+                  });
+                  console.log(b64);
+                  return (b64);
                 });
           } else {
             return image
@@ -55,9 +55,9 @@ async function gen(id, backgroundFile, firstLetter) {
                     Body: data,
                   }, ( err, status, b64 ) => {
                     console.log(status);
-                    console.log(b64);
-                    return (b64);
-                  } );
+                  });
+                  console.log(b64);
+                  return (b64);
                 });
           }
         });
