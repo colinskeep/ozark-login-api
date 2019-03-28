@@ -29,7 +29,6 @@ async function postValidate(req, res, next) {
         id: verifyCode.id,
         name: verifyCode.name,
         username: verifyCode.username,
-        thumbnail: pfpic.b64,
       });
     } else {
       res.status(200).json({data: false});
