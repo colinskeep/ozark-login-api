@@ -17,7 +17,7 @@ const s3 = new aws.S3();
 async function gen(id, backgroundFile, firstLetter) {
   try {
     const image = await sharp('images/background.jpg');
-    await image
+    return await image
         .metadata()
         .then(async function(metadata) {
           try {
@@ -63,7 +63,6 @@ async function gen(id, backgroundFile, firstLetter) {
             console.log(err);
           }
         });
-    return image;
   } catch (err) {
     console.log(err);
   }
