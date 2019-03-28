@@ -7,20 +7,14 @@ const sharp = require('sharp');
  */
 async function work(id, firstLetter) {
   const image = await sharp('images/background.jpg');
-  await image
-      .metadata()
-      .then(function(metadata) {
-        const leftMargin = Math.floor(Math.random() * (metadata.width - 200));
-        const topMargin = Math.floor(Math.random() * (metadata.height - 200));
-        if (firstLetter != 'undefined') {
-          return image
-              .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
-              .overlayWith(`images/letters/${firstLetter}.png`)
-              .toBuffer(function(err, data) {
-                return data;
-              });
-        }
-      });
+  const metadata = await image.metadata();
+  const leftMargin = Math.floor(Math.random() * (metadata.width - 200));
+  const topMargin = Math.floor(Math.random() * (metadata.height - 200));
+  const imposed = await image
+      .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
+      .overlayWith(`images/letters/${firstLetter}.png`)
+      .toBuffer();
+  return imposed;
 }
 
 module.exports = {
