@@ -1,5 +1,5 @@
 const imgupload = require('./imgupload.js');
-const rao = require('./rao.js');
+const rao = require('./resizeAndOverlay.js');
 const base64img = require('./base64img.js');
 /**
  * Upload a random pfp to amazon s3
