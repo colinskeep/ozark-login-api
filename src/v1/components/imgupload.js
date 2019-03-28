@@ -12,7 +12,7 @@ const s3 = new aws.S3();
  * @param {string} id - incoming request
  * @param {string} data - move on
  */
-async function upload(id, data) {
+async function load(id, data) {
   const upload = await s3.putObject({
     Key: `${id}/pfp_200x200.jpg`,
     Bucket: process.env.AWS_BUCKET,
@@ -23,5 +23,5 @@ async function upload(id, data) {
 }
 
 module.exports = {
-  upload,
+  load,
 };

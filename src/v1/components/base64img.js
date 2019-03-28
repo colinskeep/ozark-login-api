@@ -6,7 +6,7 @@ const registrationModel = require('../models/registration.js');
  * @param {string} id - incoming request
  * @param {string} resized - move on
  */
-async function base64img(id, resized) {
+async function store(id, resized) {
   try {
     const thumbnail = await sharp(resized).resize(20, 20).toBuffer();
     const b64 = await thumbnail.toString('base64');
@@ -18,5 +18,5 @@ async function base64img(id, resized) {
 }
 
 module.exports = {
-  base64img,
+  store,
 };
