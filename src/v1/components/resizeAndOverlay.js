@@ -5,7 +5,7 @@ const sharp = require('sharp');
  * @param {string} id - incoming request
  * @param {string} firstLetter - move on
  */
-async function do(id, firstLetter) {
+async function work(id, firstLetter) {
   const image = await sharp('images/background.jpg');
   await image
       .metadata()
@@ -24,5 +24,5 @@ async function do(id, firstLetter) {
 }
 
 module.exports = {
-  do,
+  work,
 };
