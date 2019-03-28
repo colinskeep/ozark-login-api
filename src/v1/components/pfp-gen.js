@@ -31,7 +31,7 @@ async function gen(id, backgroundFile, firstLetter) {
                     const resized = await sharp(data).resize(20, 20).toBuffer();
                     const b64 = await resized.toString('base64');
                     const user = await registrationModel.findOneAndUpdate({_id: id}, {$set: {thumbnail: b64}}, {upsert: true, new: true});
-                    await s3.putObject({
+                    return await s3.putObject({
                       Key: `${id}/pfp_200x200.jpg`,
                       Bucket: process.env.AWS_BUCKET,
                       ACL: 'public-read',
