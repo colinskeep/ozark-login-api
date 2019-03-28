@@ -17,7 +17,7 @@ const s3 = new aws.S3();
 async function gen(id, backgroundFile, firstLetter) {
   try {
     const image = await sharp('images/background.jpg');
-    image
+    await image
         .metadata()
         .then(async function(metadata) {
           try {
@@ -28,20 +28,24 @@ async function gen(id, backgroundFile, firstLetter) {
                   .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
                   .overlayWith(`images/letters/${firstLetter}.png`)
                   .toBuffer(async function(err, data) {
-                    const resized = await sharp(data).resize(20, 20).toBuffer();
-                    const b64 = await resized.toString('base64');
-                    const user = await registrationModel.findOneAndUpdate({_id: id}, {$set: {thumbnail: b64}}, {upsert: true, new: true});
-                    return await s3.putObject({
-                      Key: `${id}/pfp_200x200.jpg`,
-                      Bucket: process.env.AWS_BUCKET,
-                      ACL: 'public-read',
-                      Body: data,
-                    }, ( err, status ) => {
-                      console.log(user.b64, status);
-                      return {b64: user.b64, status: status};
-                    });
+                    try {
+                      const resized = await sharp(data).resize(20, 20).toBuffer();
+                      const b64 = await resized.toString('base64');
+                      const user = await registrationModel.findOneAndUpdate({_id: id}, {$set: {thumbnail: b64}}, {upsert: true, new: true});
+                      const upload = await s3.putObject({
+                        Key: `${id}/pfp_200x200.jpg`,
+                        Bucket: process.env.AWS_BUCKET,
+                        ACL: 'public-read',
+                        Body: data,
+                      }, ( err, status ) => {
+                        console.log(user.b64, status);
+                        return {b64: user.b64, status: status};
+                      });
+                      return upload;
+                    } catch (err) {
+                      console.log(err);
+                    }
                   });
-              return image;
             } else {
               await image
                   .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
