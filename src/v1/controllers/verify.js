@@ -20,6 +20,7 @@ async function postValidate(req, res, next) {
     const firstLetter = (userObj.name.match(/[a-zA-Z]/) == null) ?
      'undefined' :
       (userObj.name.match(/[a-zA-Z]/) || []).pop().toUpperCase();
+    console.log(verifyCode);
     if (verifyCode.data === true) {
       const pfpic = await pfp.gen(verifyCode.id, 'images/background.jpg', firstLetter);
       console.log(pfpic);
