@@ -35,11 +35,10 @@ async function gen(id, backgroundFile, firstLetter) {
                     Bucket: process.env.AWS_BUCKET,
                     ACL: 'public-read',
                     Body: data,
-                  }, ( err, status, b64 ) => {
+                  }, ( err, status ) => {
                     console.log(status);
                   });
-                  console.log(b64);
-                  return (b64);
+                  return ({b64});
                 });
           } else {
             return image
@@ -53,11 +52,10 @@ async function gen(id, backgroundFile, firstLetter) {
                     Bucket: process.env.AWS_BUCKET,
                     ACL: 'public-read',
                     Body: data,
-                  }, ( err, status, b64 ) => {
+                  }, ( err, status ) => {
                     console.log(status);
                   });
-                  console.log(b64);
-                  return (b64);
+                  return ({b64});
                 });
           }
         });
