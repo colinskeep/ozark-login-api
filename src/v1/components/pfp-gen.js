@@ -10,12 +10,9 @@ const base64img = require('./base64img.js');
 async function gen(id, backgroundFile, firstLetter) {
   try {
     const resized = await rao.work(id, firstLetter);
-    console.log('resized', resized);
     const uploaded = await imgupload.load(id, resized);
-    console.log('uploaded', uploaded);
     const b64 = await base64img.store(id, resized);
-    console.log('b64', b64);
-    return b64;
+    return {base64: b64, status: uploaded};
   } catch (err) {
     console.log(err);
   }

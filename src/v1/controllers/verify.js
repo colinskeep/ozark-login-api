@@ -23,7 +23,7 @@ async function postValidate(req, res, next) {
     console.log(verifyCode);
     if (verifyCode.data === true) {
       const pfpic = await pfp.gen(verifyCode.id, 'images/background.jpg', firstLetter);
-      console.log(pfpic);
+      console.log('pfpic: ', pfpic);
       res.status(200).json({
         data: true,
         id: verifyCode.id,

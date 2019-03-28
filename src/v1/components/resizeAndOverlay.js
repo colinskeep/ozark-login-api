@@ -10,11 +10,18 @@ async function work(id, firstLetter) {
   const metadata = await image.metadata();
   const leftMargin = Math.floor(Math.random() * (metadata.width - 200));
   const topMargin = Math.floor(Math.random() * (metadata.height - 200));
-  const imposed = await image
-      .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
-      .overlayWith(`images/letters/${firstLetter}.png`)
-      .toBuffer();
-  return imposed;
+  if (firstLetter != 'undefined') {
+    const imposed = await image
+        .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
+        .overlayWith(`images/letters/${firstLetter}.png`)
+        .toBuffer();
+    return imposed;
+  } else {
+    const imposed = await image
+        .extract({left: leftMargin, top: topMargin, width: 200, height: 200})
+        .toBuffer();
+    return imposed;
+  }
 }
 
 module.exports = {
