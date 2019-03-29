@@ -5,14 +5,13 @@ const base64img = require('./base64img.js');
  * Upload a random pfp to amazon s3
  * @param {string} id - incoming request
  * @param {string} backgroundFile - outgoing response
- * @param {string} firstLetter - move on
  */
-async function gen(id, backgroundFile, firstLetter) {
+async function gen(id, backgroundFile) {
   try {
-    const resized = await rao.work(id, firstLetter);
-    const uploaded = await imgupload.load(id, resized, 'pfp_200x200.jpg');
+    const resized = await rao.bkg(id, backgroundFile);
+    const uploaded = await imgupload.load(id, resized, 'pfb_1160x150.jpg');
     const b64 = await base64img.store(id, resized);
-    return {thumbnail: b64, status: uploaded};
+    return {pfbthumbnail: b64, status: uploaded};
   } catch (err) {
     console.log(err);
   }

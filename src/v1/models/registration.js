@@ -19,6 +19,7 @@ const registrationSchema = new mongoose.Schema({
   visibility: {type: String},
   messages: {type: String},
   thumbnail: {type: String},
+  pfbthumbnail: {type: String},
   emailNotifications: {
     message: Boolean,
     follow: Boolean,

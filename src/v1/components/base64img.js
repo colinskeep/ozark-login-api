@@ -1,5 +1,6 @@
 const sharp = require('sharp');
 const registrationModel = require('../models/registration.js');
+const imageupload = require('./imageupload.js');
 
 /**
  * Upload a random pfp to amazon s3
@@ -17,6 +18,24 @@ async function store(id, resized) {
   }
 }
 
+/**
+ * Upload a random pfp to amazon s3
+ * @param {string} id - incoming request
+ * @param {string} resized - move on
+ */
+async function storebkg(id, resized) {
+  try {
+    const thumbnail = await sharp(resized).resize(116, 15).toBuffer();
+    await imageupload.load(id, resized, 'pfb_116x15.jpg');
+    const b64 = await thumbnail.toString('base64');
+    const user = await registrationModel.findOneAndUpdate({_id: id}, {$set: {pfbthumbnail: b64}}, {upsert: true, new: true});
+    return user;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 module.exports = {
   store,
+  storebkg,
 };

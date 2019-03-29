@@ -2,6 +2,7 @@ const verify = require('../components/verify.js');
 const jwt = require('../components/jwt.js');
 const LogError = require('../components/LogError.js');
 const pfp = require('../components/pfp-gen.js');
+const pfb = require('../components/pfb-gen.js');
 const ungen = require('../components/un-gen.js');
 /**
  * Function to execute when endpoint reached
@@ -23,7 +24,7 @@ async function postValidate(req, res, next) {
     console.log(verifyCode);
     if (verifyCode.data === true) {
       const pfpic = await pfp.gen(verifyCode.id, 'images/background.jpg', firstLetter);
-      console.log('pfpic: ', pfpic);
+      const pfbkg = await pfb.gen(verifyCode.id, 'images/pfb.jpg');
       res.status(200).json({
         data: true,
         id: verifyCode.id,

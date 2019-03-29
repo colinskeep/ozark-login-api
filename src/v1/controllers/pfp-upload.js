@@ -27,7 +27,7 @@ async function postNewPfp(req, res) {
             height: 200,
           })
           .toBuffer();
-      const uploaded = await imgupload.load(userProfile.id, resized);
+      const uploaded = await imgupload.load(userProfile.id, resized, 'pfp_200x200.jpg');
       const b64 = await base64img.store(userProfile.id, resized);
       res.status(200).json({thumbnail: b64, status: uploaded, data: true});
     }
