@@ -26,7 +26,7 @@ async function store(id, resized) {
 async function storebkg(id, resized) {
   try {
     const thumbnail = await sharp(resized).resize(116, 15).toBuffer();
-    await imageupload.load(id, resized, 'pfb_116x15.jpg');
+    await imageupload.load(id, thumbnail, 'pfb_116x15.jpg');
     const b64 = await thumbnail.toString('base64');
     const user = await registrationModel.findOneAndUpdate({_id: id}, {$set: {pfbthumbnail: b64}}, {upsert: true, new: true});
     return user;
