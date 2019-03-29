@@ -31,6 +31,7 @@ async function postValidate(req, res, next) {
         name: verifyCode.name,
         username: verifyCode.username,
         thumbnail: pfpic.thumbnail,
+        pfbthumbnail: pfbkg.pfbthumbnail,
       });
     } else {
       res.status(200).json({data: false});
