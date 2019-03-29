@@ -11,7 +11,7 @@ async function gen(id, backgroundFile) {
     const resized = await rao.bkg(id, backgroundFile);
     const uploaded = await imgupload.load(id, resized, 'pfb_1160x150.jpg');
     const b64 = await base64img.storebkg(id, resized);
-    return {pfbthumbnail: b64, status: uploaded};
+    return {pfbthumbnail: b64.pfbthumbnail, status: uploaded};
   } catch (err) {
     console.log(err);
   }
