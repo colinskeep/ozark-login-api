@@ -40,7 +40,9 @@ async function postNewPfb(req, res) {
               Body: data,
             }, ( err, status ) => {
               if (err) throw err;
-              res.status(200).json({data: true,
+              res.status(200).json({
+                id: userProfile.id,
+                data: true,
                 status});
             });
           });
