@@ -1,6 +1,6 @@
 const sharp = require('sharp');
 const registrationModel = require('../models/registration.js');
-const imageupload = require('./imageupload.js');
+const imageupload = require('./imgupload.js');
 
 /**
  * Upload a random pfp to amazon s3
