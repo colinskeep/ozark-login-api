@@ -22,6 +22,7 @@ async function getUser(req, res, next) {
         bio: userProfile.bio,
         dob: userProfile.dob,
         gender: userProfile.gender,
+        thumbnail: userProfile.thumbnail,
       });
     }
   } catch (err) {

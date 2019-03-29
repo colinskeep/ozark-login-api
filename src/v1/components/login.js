@@ -24,6 +24,7 @@ async function find(email, password) {
           email: emailExists.email,
           password: emailExists.password,
           username: emailExists.username,
+          thumbnail: emailExists.thumbnail,
         };
       } else {
         return {valid: 'password not match'};

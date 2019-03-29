@@ -22,6 +22,7 @@ async function postLogin(req, res, next) {
         id: findLog.id,
         name: findLog.name,
         username: findLog.username,
+        thumbnail: findLog.thumbnail,
       });
     } else {
       res.status(200).json({error: findLog.valid});

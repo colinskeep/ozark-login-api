@@ -1,14 +1,8 @@
 const jwt = require('../components/jwt.js');
-const aws = require('aws-sdk');
-const registrationModel = require('../models/registration.js');
+const imgupload = require('../components/imgupload.js');
+const base64img = require('../components/base64img.js');
 const sharp = require('sharp');
-
-aws.config.update({
-  secretAccessKey: process.env.AWS_SECRET,
-  accessKeyId: process.env.AWS_ACCESSID,
-  region: process.env.AWS_BUCKETREGION,
-});
-const s3 = new aws.S3();
+const registrationModel = require('../models/registration.js');
 /**
  * Function to execute when endpoint reached
  * @param {string} req - incoming request
@@ -23,7 +17,7 @@ async function postNewPfp(req, res) {
     if (userObj && userProfile.password === userObj.password &&
       req.file.mimetype.split('/')[0]== 'image') {
       const image = sharp(`./uploads/${req.file.filename}`);
-      await image
+      const resized = await image
           .jpeg({
             quality: 100,
             chromaSubsampling: '4:4:4',
@@ -32,21 +26,10 @@ async function postNewPfp(req, res) {
             width: 200,
             height: 200,
           })
-          .toBuffer(async function(err, data) {
-            const resized = await sharp(data).resize(20, 20).toBuffer();
-            const b64 = await resized.toString('base64');
-            await registrationModel.findOneAndUpdate({email: userObj.email}, {$set: {thumbnail: b64}}, {upsert: true});
-            await s3.putObject({
-              Key: `${userProfile.id}/pfp_200x200.jpg`,
-              Bucket: process.env.AWS_BUCKET,
-              ACL: 'public-read',
-              Body: data,
-            }, ( err, status ) => {
-              if (err) throw err;
-              res.status(200).json({data: true,
-                status});
-            });
-          });
+          .toBuffer();
+      const uploaded = await imgupload.load(userProfile.id, resized);
+      const b64 = await base64img.store(userProfile.id, resized);
+      return {thumbnail: b64, status: uploaded};
     }
   } catch (err) {
     res.status(400).json({data: err});

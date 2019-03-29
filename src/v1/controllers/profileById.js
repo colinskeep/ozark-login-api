@@ -51,6 +51,7 @@ async function getUser(req, res) {
         gender: userProfile.gender,
         followers: userProfile.followers.length,
         following: userProfile.following.length,
+        thumbnail: userProfile.thumbnail,
         isMine,
         imFollowing,
         followingMe,
