@@ -29,7 +29,7 @@ async function postNewPfp(req, res) {
           .toBuffer();
       const uploaded = await imgupload.load(userProfile.id, resized);
       const b64 = await base64img.store(userProfile.id, resized);
-      res.status(200).json({thumbnail: b64, status: uploaded});
+      res.status(200).json({thumbnail: b64, status: uploaded, data: true});
     }
   } catch (err) {
     res.status(400).json({data: err});
