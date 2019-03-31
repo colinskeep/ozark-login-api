@@ -1,14 +1,9 @@
 const jwt = require('../components/jwt.js');
-const aws = require('aws-sdk');
 const registrationModel = require('../models/registration.js');
 const sharp = require('sharp');
+const imgupload = require('../components/imgupload.js');
+const base64img = require('../components/base64img.js');
 
-aws.config.update({
-  secretAccessKey: process.env.AWS_SECRET,
-  accessKeyId: process.env.AWS_ACCESSID,
-  region: process.env.AWS_BUCKETREGION,
-});
-const s3 = new aws.S3();
 /**
  * Function to execute when endpoint reached
  * @param {string} req - incoming request
@@ -22,30 +17,22 @@ async function postNewPfb(req, res) {
     const userProfile = await registrationModel.findOne({email: userObj.email});
     if (userObj && userProfile.password === userObj.password &&
       req.file.mimetype.split('/')[0]== 'image') {
-      const image = sharp(`./uploads/${req.file.filename}`);
-      image
-          .jpeg({
-            quality: 100,
-            chromaSubsampling: '4:4:4',
-          })
-          .resize({
-            width: 1160,
-            height: 150,
-          })
-          .toBuffer(function(err, data) {
-            s3.putObject({
-              Key: `${userProfile.id}/pfb_1160x150.jpg`,
-              Bucket: process.env.AWS_BUCKET,
-              ACL: 'public-read',
-              Body: data,
-            }, ( err, status ) => {
-              if (err) throw err;
-              res.status(200).json({
-                id: userProfile.id,
-                data: true,
-                status});
-            });
-          });
+      const image = await sharp(`./uploads/${req.file.filename}`);
+      const resized = await image.jpeg({
+        quality: 100,
+        chromaSubsampling: '4:4:4',
+      }).resize({
+        width: 1160,
+        height: 150,
+      }).toBuffer();
+      const uploaded = await imgupload.load(userProfile.id, resized, 'pfb_1160x150.jpg');
+      const b64 = await base64img.storebkg(userProfile.id, resized);
+      res.status(200).json({
+        id: userProfile.id,
+        data: true,
+        thumbnail: b64.pfbthumbnail,
+        status: uploaded.status,
+      });
     }
   } catch (err) {
     res.status(400).json({data: err});
