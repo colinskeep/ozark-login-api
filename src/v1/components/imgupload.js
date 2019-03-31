@@ -17,6 +17,7 @@ async function load(id, data, name) {
   const upload = await s3.putObject({
     Key: `${id}/${name}`,
     Bucket: process.env.AWS_BUCKET,
+    ContentType: 'image/jpeg',
     ACL: 'public-read',
     Body: data,
   }).promise();
