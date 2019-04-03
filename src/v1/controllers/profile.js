@@ -57,12 +57,12 @@ async function postUser(req, res, next) {
         console.log('username changed, updating all followers and followers');
         await registrationModel.updateMany(
             {'following': {$exists: true}},
-            {'$set': {'following.$[].username': username}},
+            {'$set': {'following.$[elem].username': username}},
             {multi: true, arrayFilters: [{'elem.username': userProfile.username}]}
         );
         await registrationModel.updateMany(
             {'followers': {$exists: true}},
-            {'$set': {'followers.$[].username': username}},
+            {'$set': {'followers.$[elem].username': username}},
             {multi: true, arrayFilters: [{'elem.username': userProfile.username}]}
         );
       }
