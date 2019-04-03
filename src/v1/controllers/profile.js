@@ -53,6 +53,19 @@ async function postUser(req, res, next) {
             gender: req.body.gender,
           }},
           {upsert: true});
+      if (userProfile.username != username) {
+        console.log('username changed, updating all followers and followers');
+        await registrationModel.updateMany(
+            {'following.username': userProfile.username},
+            {'$set': {'following.$[].username': username}},
+            {safe: true, multi: true},
+        );
+        await registrationModel.updateMany(
+            {'followers.username': userProfile.username},
+            {'$set': {'followers.$[].username': username}},
+            {safe: true, multi: true},
+        );
+      }
       res.status(200).json({data: true});
     }
   } catch (err) {
