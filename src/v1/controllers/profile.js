@@ -55,15 +55,13 @@ async function postUser(req, res, next) {
           {upsert: true});
       if (userProfile.username != username) {
         console.log('username changed, updating all followers and followers');
-        await registrationModel.updateMany(
-            {'following.username': userProfile.username},
-            {'$set': {'following.$[].username': username}},
-            {safe: true, multi: true},
+        await registrationModel.update(
+            {'$set': {'following.$[element].username': username}},
+            {multi: true, arrayFilters: [{'element.username': userProfile.username}]}
         );
-        await registrationModel.updateMany(
-            {'followers.username': userProfile.username},
-            {'$set': {'followers.$[].username': username}},
-            {safe: true, multi: true},
+        await registrationModel.update(
+            {'$set': {'followers.$[element].username': username}},
+            {multi: true, arrayFilters: [{'element.username': userProfile.username}]}
         );
       }
       res.status(200).json({data: true});
